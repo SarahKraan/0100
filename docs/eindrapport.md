@@ -1,7 +1,7 @@
 # Eindrapport 
 ## Inhoudsopgave
 [1: Basismodel](#1-basismodel)\
-2:...\
+2: ...\
 3: ...\
 4: ...\
 5: ...\
@@ -12,3 +12,4 @@
 10: ...
 
 ## 1. Basismodel
+### Introductie
