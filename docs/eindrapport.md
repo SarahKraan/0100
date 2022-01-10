@@ -1,7 +1,7 @@
 # Eindrapport 
 ## Inhoudsopgave
 [1: Basismodel](#1-basismodel)\
-2: ...\
+[2. HOOFDSTUK 2](#hoofdstuk-2-en-alle-volgende-hoofdstukken)\
 3: ...\
 4: ...\
 5: ...\
@@ -44,3 +44,29 @@ Evaluatie door analyseren van de training en validatie resultaten:\
 Invoegen van visualisaties van het trainingsproces:\
 Heeft dit model het probleem uit de introductie verholpen:\
 Analyseren van mogelijke verdere verbeteringen (voor volgende hoofdstukken):
+
+## HOOFDSTUK 2 EN ALLE VOLGENDE HOOFDSTUKKEN
+
+### Introductie
+Specifieke probleem die deze versie probeert aan te pakken:\
+High level overview van veranderingen van dit model t.o.v. het vorige model:
+
+### Data Analyse en Voorverwerking
+Mogelijke data analyse of aanpassingen in de data voor het runnen van nieuwe model:
+
+### Model Pipeline en Training
+Welke input begint het model mee:\
+Wat voor type model is gebruikt (inclusief welke layers van welke grootte + welke activatie functie(s):\
+Post processing steps vóór het maken van de voorspelling:\
+Batch size / number of epochs:
+
+### Evaluatie en Conclusies
+Evaluatie door analyseren van de training en validatie resultaten:\
+Vergelijken met het vorige model:\
+Invoegen van visualisaties van het trainingsproces:\
+Mogelijke trade-offs in vergelijking met vorige model (wat nu wellicht slechter gaat):\
+Heeft dit model het probleem uit de introductie verholpen:\
+Analyseren van mogelijke verdere verbeteringen (voor volgende hoofdstukken):
+
+
+
