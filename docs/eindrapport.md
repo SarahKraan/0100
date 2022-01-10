@@ -1,7 +1,7 @@
 # Eindrapport 
 ## Inhoudsopgave
-[1: Data verkennen](#1-data-verkennen)\
-[2: Basismodel](#2-basismodel)\
+[1: Basismodel](#1-basismodel)\
+2:...\
 3: ...\
 4: ...\
 5: ...\
@@ -11,6 +11,4 @@
 9: ...\
 10: ...
 
-## 1. Data verkennen
-
-## 2. Basismodel
+## 1. Basismodel
