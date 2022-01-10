@@ -5,7 +5,7 @@ Er zijn meer dan 47.000 gekleurde (RGB) afbeeldingen gebruikt om het netwerk te 
 
 ## Structuur
 Het huidige project bestaat uit de volgende onderdelen te vinden in deze repository:
-* /logs:
+* /logs: Bevat een map per auteur met zijn/haar logbestanden.
 * /docs: Bevat alle code van het huidige project.
   * /docs/report: Bevat het 
   * /docs/images: Bevat alle afbeeldingen die zijn gebruikt in het report.
