@@ -28,3 +28,19 @@ Het specifieke probleem dat in dit gedeelte van het eindrapport wordt behandeld 
 #### Overzicht model
 Het basismodel is als volgt opgebouwd. …
 
+### Data Analyse en Voorverwerking
+Hoe hebben we de data geanalyseerd:
+- distributies van de klasses?\
+Welke aanpassingen aan de data hebben we EVT gedaan:
+
+### Model Pipeline en Training
+Welke input begint het model mee:\
+Wat voor type model is gebruikt (inclusief welke layers van welke grootte + welke activatie functie(s):\
+Post processing steps vóór het maken van de voorspelling:\
+Batch size / number of epochs:
+
+### Evaluatie en Conclusies
+Evaluatie door analyseren van de training en validatie resultaten:\
+Invoegen van visualisaties van het trainingsproces:\
+Heeft dit model het probleem uit de introductie verholpen:\
+Analyseren van mogelijke verdere verbeteringen (voor volgende hoofdstukken):
