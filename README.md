@@ -6,9 +6,8 @@ Er zijn meer dan 47.000 gekleurde (RGB) afbeeldingen gebruikt om het netwerk te 
 ## Structuur
 Het huidige project bestaat uit de volgende onderdelen te vinden in deze repository:
 * /docs: Bevat alle documenten van het huidige project.
-  * /docs/report: Bevat het eindrapport met beschrijvingen van alle versies  
-  * /docs/images: Bevat alle afbeeldingen die zijn gebruikt in het report.
-  * hat holds all images used in the reports. Preferably organized by chapter or something alike.
+  * /docs/eindrapport: Bevat het eindrapport met beschrijvingen van alle versies van het gemaakte netwerk inclusief toelichtingen en motivatie voor de gemaakte keuzes.
+  * /docs/afbeeldingen: Bevat alle afbeeldingen die zijn gebruikt in het eindrapport (per hoofdstuk)
 * /code: Bevat alle code van het huidige project.
 
 ## Vereisten (als nodig)
