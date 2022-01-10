@@ -26,6 +26,23 @@
 \
 
 
-## 1. Data verkennen
+## 1. Data verkennen\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+
 
 ## 2. Basismodel
