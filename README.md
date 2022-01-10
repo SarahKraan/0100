@@ -1,7 +1,7 @@
 # Birds
 
 In het huidige project is een Convolutional Neural Network (CNN) ontwikkeld dat afbeeldingen van vogels over 325 verschillende vogelsoorten kan classificeren.
-Er zijn meer dan 47.000 gekleurde (RGB) afbeeldingen gebruikt om het netwerk te trainen en de afmetingen van deze afbeeldingen zijn 224 x 224 x 3. De trainings afbeeldingen bestaan uit minstens 120 afbeeldingen per vogelsoort, bestaande uit zowel vrouwelijke als mannelijke varianten van elke soort, waarbij ongeveer 85% van alle afbeeldingen vogels van het mannelijke geslacht weergeven. 
+Er zijn meer dan 47.000 gekleurde (RGB) afbeeldingen gebruikt om het netwerk te trainen en de afmetingen van deze afbeeldingen zijn 224 x 224 x 3. De afbeeldingen die zijn gebruikt voor het trainen van het netwerk bestaan uit minstens 120 afbeeldingen per vogelsoort, bestaande uit zowel vrouwelijke als mannelijke varianten van elke soort, waarbij ongeveer 85% van alle afbeeldingen vogels van het mannelijke geslacht weergeven. 
 
 ## Structuur
 Het huidige project bestaat uit de volgende onderdelen te vinden in deze repository:
