@@ -9,6 +9,7 @@ Het huidige project bestaat uit de volgende onderdelen te vinden in deze reposit
   * /docs/eindrapport: Bevat het eindrapport met beschrijvingen van alle versies van het gemaakte netwerk inclusief toelichtingen en motivatie voor de gemaakte keuzes.
   * /docs/afbeeldingen: Bevat alle afbeeldingen die zijn gebruikt in het eindrapport (per hoofdstuk)
 * /code: Bevat alle code van het huidige project.
+  * /code/basismodel: Bevat een Google Colab link naar de code voor het basismodel.
 
 ## Vereisten (als nodig)
 De vereiste bibliotheken en/of programma's die nodig zijn om de code van het huidige project te runnen zijn:
