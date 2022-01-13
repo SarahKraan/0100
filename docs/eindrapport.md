@@ -46,9 +46,9 @@ Voor het trainen van het model wordt een aantal van 20 epochs aangehouden. Dit a
 
 ### Evaluatie en Conclusies
 Evaluatie door analyseren van de training en validatie resultaten:
-Na een aantal keer het model gerund te hebben is te zien dat het model overfit (zoals te zien is in de afbeelding hieronder). Dit is makkelijk te herkennen aan de trainingskosten die vrijwel op 0 zit na de 20 epochs terwijl de validatie kosten omhoog blijft gaan. Ook is te zien dat de accuraatheid van de validatie data blijft steken rond de 30% terwijl de trainingsdata een accuraatheid heeft van in de 90%. 
+Na een aantal keer het model gerund te hebben is te zien dat het model overfit (zoals te zien is in de afbeelding hieronder). Dit is makkelijk te herkennen aan de trainingskosten die vrijwel op 0 zit na de 20 epochs terwijl de validatie kosten omhoog blijft gaan. Ook is te zien dat de accuraatheid van de validatie data blijft steken tussen de 15 en 20% terwijl de trainingsdata een accuraatheid heeft van 95%. 
 
-
+![image](https://user-images.githubusercontent.com/68432564/149306288-c19f45f4-3298-4399-aff4-fe37e739d33e.png)
 
 Het huidige model dient als basismodel om vanuit verder te werken en is nog niet voldoende functioneel. Het classificeren van de verschillende vogelsoorten kan namelijk nog niet optimaal. De volgende stap is daarom om het model te optimaliseren.
 
@@ -77,3 +77,8 @@ Invoegen van visualisaties van het trainingsproces:
 Mogelijke trade-offs in vergelijking met vorige model (wat nu wellicht slechter gaat):
 Heeft dit model het probleem uit de introductie verholpen:
 Analyseren van mogelijke verdere verbeteringen (voor volgende hoofdstukken):
+
+
+
+
+
