@@ -30,7 +30,19 @@ Het specifieke probleem dat in dit gedeelte van het eindrapport wordt behandeld 
 Voor de opbouw van het basismodel is gebruik gemaakt van de TensorFlow bibliotheek. Om te beginnen zijn een aantal basislagen aan het model toegevoegd. Hierbij zijn om en om twee Conv2D lagen en MaxPooling lagen gebruikt, gevolgd door een Flatten en Dense laag.
 
 ### Data Analyse en Voorverwerking
-De dataset 325 Birds Species te vinden op kaggle (hier linkje van maken) voorziet ons van alle data die nodig is om dit onderzoek uit te voeren. Deze dataset bestaat uit 50582 foto’s in totaal van 325 soorten vogels. De afbeeldingen hebben als afmeting allemaal 224 (pixels) x 224 (pixels) x 3 (lagen). De drie lagen houden in dat de afbeeldingen volgens het RGB-systeem gekleurd zijn. Hieronder volgen een aantal voorbeeldafbeeldingen uit de dataset: 
+De dataset 325 Birds Species te vinden op [kaggle](https://www.kaggle.com/gpiosenka/100-bird-species) voorziet ons van alle data die nodig is om dit onderzoek uit te voeren. Deze dataset bestaat uit 50582 foto’s in totaal van 325 soorten vogels. De afbeeldingen hebben als afmeting allemaal 224 (pixels) x 224 (pixels) x 3 (lagen). De drie lagen houden in dat de afbeeldingen volgens het RGB-systeem gekleurd zijn. Hieronder volgen een aantal voorbeeldafbeeldingen uit de dataset: 
+
+![image](https://user-images.githubusercontent.com/59557088/149712632-efcb392b-8414-4fa2-88e3-2b93c935677d.png)
+
+Afbeelding 1
+
+![image](https://user-images.githubusercontent.com/59557088/149712645-67429430-3e64-4bc8-9b5b-95367ac61687.png)
+
+Afbeelding 2
+
+![image](https://user-images.githubusercontent.com/59557088/149712619-b6f44347-bdc7-4648-be41-a59847b5dd03.png)
+
+Afbeelding 3
 
 Binnen de dataset was al onderscheid gemaakt tussen training-, test- en validatiedata; de trainingsdata bevat 47332 afbeeldingen en de test- en validatiedata allebei 1625 afbeeldingen. Deze verdeling is zo optimaal mogelijk gedaan om een zo precies mogelijke voorspelling over de vogelsoort bij een afbeelding te kunnen maken. Vanwege deze verdeling die al in de dataset aanwezig was, is het niet nodig om een eigen onderverdeling te maken. 
 
@@ -51,6 +63,9 @@ Voor het trainen van het model wordt een aantal van 20 epochs aangehouden. Dit a
 ### Evaluatie en Conclusies
 Evaluatie door analyseren van de training en validatie resultaten:
 Na een aantal keer het model gerund te hebben is te zien dat het model overfit (zoals te zien is in de afbeelding hieronder). Dit is makkelijk te herkennen aan de trainingskosten die vrijwel op 0 zit na de 20 epochs terwijl de validatiekosten omhoog blijft gaan. Ook is te zien dat de accuraatheid van de validatiedata blijft steken tussen de 15 en 20% terwijl de trainingsdata een accuraatheid heeft van 95%. 
+
+ ![image](https://user-images.githubusercontent.com/59557088/149712086-5d5409ef-acab-4895-ba74-b5cb7b562870.png)
+
 
 Figuur 1
 
@@ -86,15 +101,19 @@ Ten slotte is in de derde versie slechts gebruik gemaakt van één dropout-laag,
 ### Evaluatie en Conclusies
 De resultaten van de eerste versie die dropout-lagen bevat zijn terug te vinden in figuur 2 en bevatten twee grafieken van kosten en precisie. Opmerkelijk is dat het overfitten van het basismodel tegengegaan lijkt te zijn, aangezien de trainingskosten en validatiekosten dichter bij elkaar liggen. Echter valt ook op dat de precisie van de validatiedata omlaag is gegaan ten opzichte van het basismodel. Dat terwijl het tegengaan van overfitting bedoeld is om het model beter werkend te maken op validatiedata zodat deze preciezer voorspeld kan worden. Met deze lagere precisie voor de validatiedata vormt deze eerste versie van dropout-layers geen waardevolle aanvulling op het basismodel. Dit kan eraan liggen dat de dropout een te grote invloed had op het model, en dat met het verwijderen van deze datapunten te veel informatie van het model verloren is gegaan. Het model underfit dan, wat ook blijkt uit dat de kosten voor de trainingsdata in dit model een stuk hoger zijn en dat de precisie van voorspelling nooit de 1 benaderd. Het is daarom verstandig om in versie 2 een dropout toe te passen met lagere kansen.
 
+ ![image](https://user-images.githubusercontent.com/59557088/149712139-7a261f6f-d1ba-4b65-8862-cc78de30fc33.png)
+
 Figuur 2: Dropout 1: 0.4, dropout 2: 0.2
 
 In figuur 3 is te zien dat deze mildere dropout inderdaad tot betere resultaten leidt; de precisie van zowel de trainingsdata als de validatiedata is gestegen, en de kosten zijn gedaald. Echter zijn deze waarden nog altijd minder wenselijk dan het basismodel, waardoor deze versie van dropout ook geen waardevolle aanvulling is op het basismodel. 
 
+ ![image](https://user-images.githubusercontent.com/59557088/149712165-3e90767c-3226-4058-a8d2-18bc81d5d23f.png)
 
 Figuur 3: Dropout 1: 0.2, dropout 2: 0.1
 
 In figuur 4 met slechts de ene dropout-laag blijven de resultaten praktisch gelijk als voor de tweede versie. Hieruit valt te concluderen dat de aantasting van het basismodel vooral zit in de eerste dropout laag tussen de Conv2D-lagen in.
 
+ ![image](https://user-images.githubusercontent.com/59557088/149712194-817606b3-2abd-4c3e-920f-5073e924c2f1.png)
 
 Figuur 4: Dropout 1: 0.2
 
@@ -120,6 +139,8 @@ De data gebruikt voor de input is hetzelfde zoals in voorgaande hoofdstukken 2 e
 ### Evaluatie en Conclusies
 De resultaten op de accuraatheid van het netwerk zijn terug te vinden in figuur 5.
 De accuraatheid van de trainingsdata is nogmaals erg hoog, hoog in de 90%. De accuraatheid van de validatiedata daarentegen, is ditmaal toegenomen ten opzichte van het basismodel en ligt nu tussen de 50 en 55%. Dit is een positieve verandering, een toename in de accuraatheid van de validatiedata is gewenst om het netwerk te optimaliseren. Er is echter wel nog steeds sprake van overfitting, al is het verschil in de accuraatheid van de trainingsdata en validatie met het huidige verdiepte netwerk wel een stuk lager en overfit het model dus wel wat minder. Door het toevoegen van de extra lagen is het netwerk zeker complexer geworden en dit is terug te zien in de toegenomen accuraatheid van de validatiedata. Een volgende stap om het overfitten van het netwerk tegen te gaan is om nogmaals methodes die overfitten tegengaan uit te proberen op het nieuwe verdiepte netwerk.
+
+ ![image](https://user-images.githubusercontent.com/59557088/149712239-bcc3ab2c-4924-49da-9922-c1097eea15a1.png)
 
 Figuur 5: Kosten en accuraatheid van het verdiepte netwerk bestaande uit vier lagen.
 
