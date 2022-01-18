@@ -4,7 +4,7 @@
 [2: Basismodel](#2-basismodel)\
 [3: Drop-out methode tegen overfitten](#3-drop---out-methode-tegen-overfitten)\
 [4: Verdiepen van het netwerk](#4-verdiepen-van-het-netwerk)\
-[5:Leaky ReLu activatie functies](#5-leaky-relu-activatie-functies)\
+[5: Leaky ReLu activatie functies](#5-leaky-relu-activatie-functies)\
 6: ...\
 7: ...\
 8: ...\
