@@ -235,3 +235,191 @@ Het preprocess argument dat mee wordt genomen tijdens het trainen en evalueren v
 
 ### Evaluatie en Conclusies
 In figuur 13 is te zien dat, ten opzichte van figuur 10, 11 en 12, de accuraatheid van de validatie data met ongeveer 10 procent is gestegen. Hierdoor kan worden gesteld dat het toevoegen van de preprocess technieken een positief resultaat heeft op de accuraatheid van het netwerk.
+
+![image](https://user-images.githubusercontent.com/68432564/150956269-ee1d59ce-0ce9-433d-8783-221e89a7452e.png)
+_Figuur 13:_ Kosten en accuraatheid bij toepassen van normalisatie.
+
+Na gezien te hebben dat de Leaky ReLU goed is geïmplementeerd, kan weer worden gekeken naar het overfitten. Er is wellicht niet genoeg (verschillende) data in sommige klassen waardoor die klassen heel lastig zijn om goed te voorspellen. Om dit op te lossen kan worden gekeken naar de klassen die het slechtst worden voorspeld. Het doel is om te achterhalen waarom deze klassen zo slecht worden voorspeld. Wellicht bestaan deze klassen uit te weinig data om het netwerk goed te trainen en kan het netwerk hierdoor bepaalde features van de vogelsoorten niet goed leren.  
+
+## 7. Data analyse 
+### Introductie
+Het verkeerd kwalificeren van soorten kan liggen aan de trainingsdata die aan het model gevoed wordt. Een manier om zowel het overfitten tegen te gaan, als de validatie accuraatheid te verhogen, is te kijken naar de verdeling van de data. Door middel van barplots is hier inzicht in te verkrijgen. In een barplot valt namelijk te zien hoe de data verdeeld is. Wanneer de data ongebalanceerd verdeeld is, kan het netwerk bepaalde vogelsoorten beter leren herkennen en daardoor beter classificeren dan andere vogelsoorten. 
+
+#### Specifieke probleem
+Het netwerk overfit nog steeds. Het is mogelijk dat het netwerk beter wordt getraind op sommige soorten dan anderen omdat er voor deze soorten meer trainingsdata beschikbaar is.
+
+#### Veranderingen in het model
+Om dit probleem tegen te gaan wordt een data analyse uitgevoerd. Het model wordt hierbij niet aangepast, maar er wordt een analyse op de trainingsdata uitgevoerd waarbij wordt gekeken uit hoeveel afbeeldingen de soorten in de trainingsdata bestaan. 
+
+### Data Analyse en Voorverwerking
+Voor de data analyse is een functie geschreven genaamd data_grafiek. Deze functie neemt als input de training labels en geeft als uitput de 5 meest voorkomende en 5 minst voorkomende vogelsoorten weer.
+
+### Model Pipeline en Training
+Het netwerk is gelijk gebleven aan het netwerk in het voorgaande hoofdstuk.
+
+### Evaluatie en Conclusies
+Uit de barplots blijkt dat de trainingsdata ongebalanceerd verdeeld is; 
+De vogelsoorten ‘SPOTTED CATBIRD’ (116), ‘CASSOWARY’ (119), ‘BLACK SWAN’ (119), ‘INCA TERN’ (119) en ‘BARN OWL’ (120) komen bij deze dataset het minst voor, waarbij de ‘SPOTTER CATBIRD’ het minst vaak voorkomt (116 keer). 
+De vogelsoorten ‘HOUSE FINCH’ (249), 'OVENBIRD' (233), 'D-ARNAUDS BARBET' (233), 'SWINHOES PHEASANT' (217), 'WOOD DUCK' (214) komen het meest voor, waarbij de ‘HOUSE FINCHhet meest voorkomt (249 keer). De meest voorkomende vogelsoort komt dus meer dan twee keer zo veel voor in de dataset dan de minst voorkomende vogelsoort.
+
+![image](https://user-images.githubusercontent.com/68432564/150956410-87485061-b37d-4ece-8cd1-77f8d6b9da0e.png)
+_Figuur 14:_ Overzicht van de hoeveelheid trainingsafbeeldingen per vogelsoort.
+
+De trainingsdata bevat van sommige vogelsoorten een stuk meer afbeeldingen dan van andere vogelsoorten. Dit zou er mogelijk toe kunnen leiden dat vogelsoorten met weinig afbeeldingen slechter voorspeld worden door het netwerk omdat hier weinig data voorhanden is, en daarmee bijdragen aan een lage accuraatheid. 
+
+Een volgende stap is het toepassen van een methode die ervoor zorgt dat de vogelsoorten met minder trainingsafbeeldingen net zo veel mee worden genomen in het trainen van het netwerk als de vogelsoorten die uit meerdere trainingsafbeeldingen bestaan. Hier zijn meerdere opties voor. 
+Een optie is de verdeling van de trainingsafbeeldingen per vogelsoort gelijk te trekken door van elke vogelsoort 116 trainingsafbeeldingen aan te houden en de extra trainingsafbeeldingen die beschikbaar zijn per vogelsoort te verwijderen uit de dataset. Een groot nadeel hiervan is dat veel goed te gebruiken data om het netwerk te trainen verloren gaat.
+Een tweede optie is het toevoegen van extra inputdata alleen op de vogelsoorten waar weinnig afbeeldingen van zijn om op deze manier de hoeveelheid trainingsafbeeldingen per vogelsoort gelijk te trekken. Het is lastig om nieuwe afbeeldingen van deze vogelsoorten te vinden en deze nog extra in te laden. Er zou voor kunnen worden gekozen om door middel van data augmentatie extra afbeeldingen van deze vogelsoorten in te voegen. Er is echter een optie die nog makkelijker en even doeltreffend zou moeten zijn.
+Deze laatste optie is om bij het trainen van het netwerk mee te geven aan het netwerk dat de vogelsoorten die uit minder trainingsafbeeldingen bestaan zwaarder mee worden genomen in het trainen van het netwerk dan vogelsoorten met meer trainingsafbeeldingen. Deze methode wordt in het hiernavolgende hoofdstuk toegepast op het netwerk. 
+
+
+## 8. Data augmentatie (weighted)
+### Introductie
+De trainingsdata is ongebalanceerd verdeeld, van sommige vogelsoorten bestaan namelijk bijna twee keer zoveel trainings afbeeldingen dan bij andere vogelsoorten. Een manier om de disbalans in de trainingsdata op te lossen is om de soorten die slecht vertegenwoordigd zijn in de trainingsdata zwaarder mee te laten wegen bij het trainen van het netwerk en oververtegenwoordigde soorten lichter mee te laten wegen. Hierdoor wordt het model diverser getraind en heeft het netwerk zo minder de neiging tot overfitten en is het netwerk meer generaliseerbaar naar de werkelijkheid. De testdata en de validatie data zijn vergeleken met de training data wel gebalanceerd verdeeld. Van elke vogelsoort zijn er bij deze data namelijk 5 afbeeldingen aanwezig.
+
+#### Specifieke probleem
+De trainingsdata bevat van sommige vogelsoorten een stuk meer afbeeldingen dan van andere vogelsoorten. Een mogelijk gevolg is dat vogelsoorten met weinig afbeeldingen slechter voorspeld worden door het netwerk en daarmee bijdragen aan een lage accuraatheid. 
+
+#### Veranderingen in het model
+In het model zelf is niets aangepast. Het wegen van de data wordt tijdens het fitten van het model toegepast.
+
+### Data Analyse en Voorverwerking
+De afbeeldingen van soorten moeten worden gewogen op basis van frequentie. Dit is geïmplementeerd door de gewichten van de soorten op basis van frequentie ten opzichte van alle andere soorten op te slaan als values per soort in een dictionary. 
+
+### Model Pipeline en Training
+Op het moment dat het model de verwachte waarden fit, wordt de dictionary ingevoerd bij het argument class_weights. Hierdoor krijgt het netwerk tijdens het fitten de boodschap mee dat het bij het berekenen van de kostenfunctie meer rekening moet houden met weinig voorkomende vogelsoorten, en minder met veel voorkomende vogelsoorten. 
+
+
+### Evaluatie en Conclusies
+Op basis van de kosten en accuraatheid weergeven in figuur 14 valt te concluderen dat het zwaarder mee laten wegen van ondervertegenwoordigde trainingsdata en het lichter mee laten wegen van oververtegenwoordigde trainingsdata in de kostenfunctie helaas niet heeft geleid tot een beter voorspellend model; sterker nog, het model voorspelt nu slechter dan voor deze aanpassing. Weliswaar komt de kostenfunctie nog wel overeen met de eerdere situatie, maar is de validatie accuraatheid teruggelopen van rond de 0.7 naar 0.65. Hoewel de trainingsdata nu verschillend meewegen in de kostenfunctie aan de hand van hoe de trainingsdata verdeeld zijn, voorspelt het model nu slechter door het zwaarder wegen van de soorten die weinig voorkwamen. Een conclusie die hieraan te verbinden valt is dat de specifieke vogelsoorten die weinig voorkomen in de trainingsdata lastiger te voorspellen zijn dan vogelsoorten die veel voorkomen in de trainingsdata. Door deze data dan zwaarder mee te laten wegen neemt de algehele validatie accuraatheid af.
+
+![image](https://user-images.githubusercontent.com/68432564/150956494-753b1ecc-ecb2-45fb-a53c-90df5a6d2852.png)
+_Figuur 15:_ Kosten en accuraatheid van het model waarbij ondervertegenwoordigde trainingsdata zwaarder meewegen in de kostenfunctie, en oververtegenwoordigde trainingsdata minder zwaar meewegen.
+
+Omdat het verschillend mee laten wegen van de trainingsdata in de kostenfunctie geen effect oplevert, lijkt het ons verstandig om in de volgende vervolgstap te onderzoeken bij welke data het netwerk het meest de fout in gaat. De voorspelling die volgt uit het huidige hoofdstuk is dan dat de vogelsoorten die uit minder trainingsafbeeldingen bestaan het lastigst te classificeren zijn. Om deze hypothese te testen is een goede vervolgstap om te analyseren bij welke vogelsoorten de classificatie niet correct verloopt. De bevindingen die hieruit worden opgedaan kunnen verder worden verwerkt en geprobeerd tegen te gaan door passende data augmentatie toe te passen. 
+
+MILESTONE 4 deel 1
+## 9. Netwerk analyse
+### Introductie
+Om het overfitten van het netwerk verder tegen te gaan en de validatie accuratie van het model te verhogen, kan analyseren van hoe het netwerk tot nu toe presteert per vogelsoort relevante informatie opleveren. Door te kijken naar de validatie accuracy per vogelsoort, kan in kaart worden gebracht welke vogelsoorten het netwerk voornamelijk correct weet te voorspellen en welke niet. Aan de hand van deze resultaten kunnen wellicht overeenkomsten gevonden worden tussen vogelsoorten die wel goed voorspeld worden door het netwerk en vogelsoorten die niet goed worden voorspeld door het netwerk. Door te weten welke aspecten ervoor zorgen dat het netwerk een vogelsoort wel of juist niet correct voorspelt kan er worden geprobeerd dit aspect meer naar voren te laten komen of om hier juist voor te corrigeren. 
+
+Het analyseren van de accuraatheid per vogelsoort kan worden gedaan aan de hand van een confusion matrix. In een confusion matrix staan de accuraties per vogelsoort namelijk op de diagonaal.  Aan de hand van de accuraatheden op de diagonaal kunnen de vogelsoorten geselecteerd worden met de laagste en hoogste accuraatheid. Aan de hand van de informatie verkregen uit de accuraatheden, kan bepaald worden op welke manieren verdere augmentatie van de data van pas zou komen. 
+
+#### Specifieke probleem
+Het huidige netwerk overfit nog steeds en de validatie accuratie is nog niet optimaal. 
+
+#### Veranderingen in het model
+Er zijn geen veranderingen aangebracht aan het netwerk. 
+
+### Data Analyse en Voorverwerking
+Een confusion matrix geeft een duidelijk overzicht van hoe goed en hoe slecht de data voorspeld wordt met een classificatie model. Op zowel de x-as als de y-as staan de vogelsoorten, waarbij voor een specifieke vogelsoort de index van de rij hetzelfde is als de index van de column (dus de albatross staat bijvoorbeeld op zowel rij 1 als column 1). De x-as verwijst vervolgens naar de ware vogelsoort, en de y-as naar de voorspelde vogelsoort. Vanwege deze indeling, staan op de diagonaal de accuraatheden van elke vogelsoort. Hierbij houdt de accuraatheid in hoe groot de ratio is van vogels die tot een bepaalde soort behoren en door het netwerk ook tot deze soort zijn geclassificeerd. Aan de hand van de accuraatheden op de diagonaal kunnen de vogelsoorten geselecteerd worden met de laagste en hoogste accuraatheden.
+
+### Model Pipeline en Training
+Het netwerk hoefde niet gerund te worden voor dit hoofdstuk. 
+
+### Evaluatie en Conclusies
+De vogelsoorten met de 5 laagste en 5 hoogste accuraatheden zijn als volgt.
+De 5 vogelsoorten die het slechtst herkend worden zijn: 'PHILIPPINE EAGLE', 'ELLIOTS  PHEASANT', 'GRAY PARTRIDGE', 'DARK EYED JUNCO' en de 'STRAWBERRY FINCH'. 
+Hieronder volgen deze vogelsoorten met 3 bijbehorende afbeeldingen.
+
+![image](https://user-images.githubusercontent.com/68432564/150956669-5cbc20a7-5219-4dca-aaa8-b71e44c7b206.png)
+_Afbeelding 2:_ Drie afbeeldingen van de Philippine Eagle.
+
+![image](https://user-images.githubusercontent.com/68432564/150956781-6d8970ed-0cb6-484a-9517-ac2b195385f0.png)
+_Afbeelding 3:_ Drie afbeeldingen van de Elliots Pheasant.
+
+![image](https://user-images.githubusercontent.com/68432564/150956831-98e86d44-8185-41cf-adec-bbb6fb48a61b.png)
+_Afbeelding 4:_ Drie afbeeldingen van de Gray Partridge.
+
+![image](https://user-images.githubusercontent.com/68432564/150956905-b7de6b23-e28c-455f-8a65-c1b3035a73da.png)
+_Afbeelding 5:_ Drie afbeeldingen van de Dark Eyed Junco.
+
+![image](https://user-images.githubusercontent.com/68432564/150956961-600dd67a-60b1-4eab-bc25-fb0cfb0d31e4.png)
+_Afbeelding 6:_ Drie afbeeldingen van de Strawberry Finch.
+
+De 5 vogelsoorten die het best herkend worden zijn: 'STRIPPED MANAKIN', 'AFRICAN FIREFINCH', 'SNOWY EGRET', 'GOLD WING WARBLER’ en de 'RED NAPED TROGON’. Hieronder volgen deze vogelsoorten met 3 bijbehorende afbeeldingen.
+
+![image](https://user-images.githubusercontent.com/68432564/150957035-93d8ccc8-5c46-4a97-a4bc-e91a446caeea.png)
+_Afbeelding 7:_ Drie afbeeldingen van de Stripped Manakin.
+
+![image](https://user-images.githubusercontent.com/68432564/150957110-fa6bcb30-4281-4a3e-b66d-76288fd3cc18.png)
+_Afbeelding 8:_ Drie afbeeldingen van de African Firefinch.
+
+![image](https://user-images.githubusercontent.com/68432564/150957171-22f09707-9e68-4bbb-9dfa-c1a0721ae11c.png)
+_Afbeelding 9:_ Drie afbeeldingen van de Snowy Egret.
+
+![image](https://user-images.githubusercontent.com/68432564/150957226-dbdf148c-4a8f-4bc5-81ed-1942e6ac9238.png)
+_Afbeelding 10:_ Drie afbeeldingen van de Gold Wing Warbler.
+
+![image](https://user-images.githubusercontent.com/68432564/150957274-d9dd6594-cdb7-4d45-8ca4-432716704769.png)
+_Afbeelding 11:_ Drie afbeeldingen van de Red Naped Trogon.
+
+Op te maken uit de afbeeldingen van de slechtst herkenbare en best herkenbare vogelsoorten is voornamelijk het verschil in kleur. De vogels die het vaakst correct worden geclassificeerd zijn vogels met opvallende kleuren. De vogels die het minst vaak correct worden geclassificeerd daarentegen zijn vogels met onopvallende kleuren. Daarnaast lijken deze onopvallende kleuren meer op de achtergronden waarop de vogels afgebeeld zijn. De vogels die het slechts worden geclassificeerd lijken hierdoor meer weg te vallen. Om het netwerk beter te trainen zijn twee opties mogelijk; ofwel het vermeerderen van de trainingsdata ofwel de beschikbare trainingsdata zo bewerken dat het netwerk meer van de data leert. Het vermeerderen van de data door middel van data augmentatie en het verwerken van de bevindingen van dit hoofdstuk door de bestaande trainingsafbeeldingen te bewerken zal in de komende twee hoofdstukken één voor één behandeld worden.
+
+MILESTONE 4 deel 2
+## 10. Data augmentatie (horizontale flip)
+
+### Introductie
+Uit de netwerk analyse bleek dat sommige vogelsoorten nog niet erg goed gekwalificeerd kunnen worden door het model op basis van de huidige trainingsdata. Dit probleem valt deels te verhelpen door een data augmentatie op de trainingsdata. Door bij het preprocessen van de afbeeldingen ook de foto’s te spiegelen en deze gespiegelde foto’s extra toe te voegen aan de trainingsdata, is er meer data en ook meer diverse data voorhanden voor het model om van te leren. Het model zou dus met hogere accuraatheid moeten kunnen voorspellen na deze alteratie. Daarnaast valt zo ruis weg van de trainingsdata omdat hele specifieke aspecten van de afbeeldingen ook gespiegeld worden en zo verzwakt worden, dus de overfitting wordt wederom aangepakt. 
+Bij het kiezen van de as van spiegelen ligt horizontaal meer voor de hand. Na bestudering van enkele foto’s uit de dataset werd ons duidelijk dat de vogels zeer vaak in gewone rechtopstaande positie afgebeeld zijn, en niet bijvoorbeeld op de kop hangend. Door deze rechte afbeeldingen horizontaal te spiegelen ontstaan nieuwe afbeeldingen van ook rechtopstaande vogels, maar dan de andere kant op gedraaid. Zo zouden de vogels ook in nieuwe sets van data zoals de validatie data kunnen voorkomen. Een verticale spiegeling ligt niet voor de hand, aangezien er weinig vogels in onze trainingsdata op de kop hangend zijn afgebeeld, en dit verticaal spiegelen ook niet een herkenbaar beeld zou opleveren. 
+
+#### Specifieke probleem
+In het huidige model worden sommige vogelsoorten nog niet accuraat genoeg door het model voorspeld. Door de afbeeldingen te spiegelen en ook op te nemen in de trainingsdata wordt de trainingsdata meer divers en omvangrijk, en kan overfitting tegengegaan worden.
+
+#### Veranderingen in het model 
+Het model berekent nog op eenzelfde manier het definitieve model, er zijn slechts aanpassingen gedaan aan de trainingsdata.
+
+### Data Analyse en Voorverwerking
+Het spiegelen van afbeeldingen is geïmplementeerd binnen de preprocess stap. Hierin is horizontal-flip op True gezet. Dit houdt in dat random wordt bepaald voor een afbeelding in de trainingsdata of deze horizontaal gespiegeld aan de trainingsdata wordt toegevoegd. 
+
+### Model Pipeline en Training
+De aanpassing van dit hoofdstuk heeft geen invloed op de Model Pipeline
+
+### Evaluatie en Conclusies
+Bestudering van de resultaten van dit hoofdstuk in figuur 16 leidt tot de conclusie dat er mooie progressie is geboekt met toevoeging van de horizontale spiegelingen in de trainingsdata. Gelijk valt op dat de validatie accuraatheid is gestegen van 0.7 naar 0.75. Ook zijn de validatie kosten gedaald en zijn de lijnen van training- en validatie accuraatheid dichterbij elkaar komen te liggen. Hieruit valt op te maken dat overfitten weer deels is verholpen. Dit zijn allemaal gewenste resultaten. De keerzijde is wel dat het model langzamer is geworden, vanwege de toevoeging van de gespiegelde afbeeldingen aan de trainingsdata. Het kost nu meer tijd om deze grotere trainingsset te verwerken. Aangezien deze augmentatie zich slechts richtte op het verkrijgen van meer trainingsdata - een vrij algemene stap naar verbetering bij het bouwen van een model - kan op basis van de diepgaande data-analyse ook nog gekeken worden naar augmentaties die specifiek gericht zijn op vogelsoorten die slecht voorspeld zijn.
+
+![image](https://user-images.githubusercontent.com/68432564/150957358-65119ad2-55aa-4dff-bded-857c88b0b0b5.png)
+_Figuur 16:_ Kosten en accuraatheid bij horizontaal gespiegelde afbeeldingen in trainingsdata.
+
+MILESTONE 4 deel 3
+## 11. Data augmentatie (croppen)
+### Introductie
+Uit de netwerk analyse is gebleken dat voor een aantal klassen de vogelsoorten niet goed herkend kunnen worden. Dit kan komen doordat bv. de kleuren van de vogels te veel overeenkomen met de kleuren in de achtergrond. Voor slechts een paar afbeeldingen hoeft dit geen probleem te zijn, maar als er bijvoorbeeld in de dataset veel afbeeldingen voorkomen van bruine vogels in hun bruine natuurlijke leefomgeving kan het model hier snel moeite mee krijgen. Om dit te voorkomen kan worden gekeken of het inzoomen op de foto’s tot een verbetering leidt. Zo wordt de focus voor het model meer gelegd op de essentiële onderscheidende informatie van de vogel die zich meer in het centrum van de afbeelding bevindt.
+
+#### Specifieke probleem
+Het model kan nu nog erg slecht bepaalde vogelsoorten herkennen. Deze vogelsoorten hebben voornamelijk ruis van de achtergrond omdat de vogels en de achtergrond vaak (bijna) dezelfde kleur hebben. 
+
+#### Veranderingen in het model
+Na het opbouwen van het model kan in het preprocess argument een nieuwe techniek worden meegegeven. Om te kunnen croppen wordt de techniek ‘zoom range’ meegegeven. Deze techniek zoomt in op het midden van de foto met een bepaalde factor. Zo zoomt een factor 0.5 2 keer in op het midden van de foto. 
+
+### Data Analyse en Voorverwerking
+Aan deze verbeterstap is geen data analyse of voorverwerking van pas gekomen maar is de data gebruikt zoals in de vorige hoofdstukken.
+
+### Model Pipeline en Training
+Om het model te trainen met de ingezoomde data wordt het preprocess argument in de train en evalueer functie aangepast. Hier wordt de ‘zoom range’ techniek toegevoegd. Deze techniek zoomt in op het midden van de foto met een bepaalde factor of bereik. Als hier een factor wordt ingevoerd wordt er zowel in als uitgezoomd met deze factor. Bij een zoomfactor van 0.25 wordt 25% ingezoomd zodat er wordt gekeken naar 75% van de foto en wordt 25% uitgezoomd naar 125%. Wij willen echter niet naar het uitgezoomde deel van de foto kijken, aangezien is vastgesteld dat de essentiële informatie zich meer in het centrum van de afbeelding bevindt. Daarom gebruiken wij een bereik. Met het bereik kan een lijst met 2 waardes worden meegegeven. De foto wordt ingezoomd op basis van de opgegeven waardes. Een lijst met 0.75, 1.1 zal ingezoomd worden van 75% tot uitzoomen van 10%. In dit model wordt gekeken naar de bereiken van [0.75, 1] en [0.5, 0.75]. De eerste zoom zal een kleine zoom doorvoeren en zo een beter beeld van de vogel geven. De tweede zoom probeert meer focus te leggen op de vogel en probeert echt de ruis in de achtergrond weg te snijden. 
+
+### Evaluatie en Conclusies
+De zoom bereiken waar naar wordt gekeken zijn [0.75, 1] en [0.5, 0.75]. Het resultaat van de eerste zoom range staat afgebeeld in figuur 17. Te zien is dat de accuraatheid van het model omhoog is gegaan naar 77%. Dit is een verbetering van 3% t.o.v. het invoegen van de horizontal flip. 
+
+![image](https://user-images.githubusercontent.com/68432564/150957528-20f48b34-7c49-4e69-b56c-9e30d39cac0a.png)
+_Figuur 17:_ Kosten en accuraatheid bij een zoom range van [0.75, 1]
+
+Naast het kijken naar een zoom range van [0.75, 1] willen we ook zien of er meer op de vogels gefocust kan worden. Deze zoom gaf echter minder succes dan de eerdere zoom. De zoom van [0.5, 0.75] staat afgebeeld in figuur 18. Te zien is dat er een grote hap is genomen uit de accuraatheid. De accuraatheid ligt op 68% terwijl deze hiervoor naar 77% was gebracht.
+
+![image](https://user-images.githubusercontent.com/68432564/150957637-613e6fa7-81b7-4ddb-ae77-5c76b8f5db14.png)
+Figuur 18: Kosten en accuraatheid bij een zoom range van [0.5, 0.75]
+
+De verbetering van dit hoofdstuk vormt het slotstuk van de data augmentatie; wij hebben nu enkele methoden uitgeprobeerd en zijn tevreden met de geboekte resultaten. Echter is er nog voldoende progressie te boeken, en vindt er ook zeker nog overfitting plaats. Daarom gaan wij in het volgende hoofdstuk weer verder met nieuwe methodes om overfitting tegen te gaan.
+
+Bronnen:
+1). https://towardsdatascience.com/analyzing-different-types-of-activation-functions-in-neural-networks-which-one-to-prefer-e11649256209
+2).
+https://www.tensorflow.org/api_docs/python/tf/keras/preprocessing/image/ImageDataGenerator
+3). 
+https://www.kaggle.com/gpiosenka/100-bird-species
+
+
+
+
+
+
