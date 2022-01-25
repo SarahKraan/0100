@@ -5,42 +5,42 @@
 [3: Drop-out methode tegen overfitten](#3-drop---out-methode-tegen-overfitten)\
 [4: Verdiepen van het netwerk](#4-verdiepen-van-het-netwerk)\
 [5: Leaky ReLu activatie functies](#5-leaky-relu-activatie-functies)\
-6: ...\
-7: ...\
-8: ...\
-9: ...\
-10: …
+[6: Normaliseren van de afbeeldingen](#6-normaliseren-van-de-afbeeldingen)\
+[7: Data analyse](#7-data-analyse)\
+[8: Data augmentatie (weighted)(#8-data-augmentatie-weighted)\
+[9: Netwerk analyse(#9-netwerk-analyse)\
+[10: Data augmentatie (horizontale flip)(#10-data-augmentatie-horizontale-flip)\
+[11: Data augmentatie (croppen)(#11-data-augmentatie-croppen)\
 
 ## 1. Inleiding
 Het aantal bedreigde diersoorten neemt elk jaar toe. Dit is te wijten aan onder andere de afnemende grootte van leefruimte voor dieren, het wegvallen van primaire of non-primaire voedselbronnen, een toenemend aantal stroperijen en klimaatveranderingen. Het is cruciaal om kennis te hebben van de diersoorten die in de nabije toekomst een groot risico lopen om een bedreigde diersoort te worden. Een hulpmiddel dat voor dit doeleinde kan worden gebruikt is het tellen van het aantal dieren dat van een bepaalde soort bestaat. Hierdoor kan in kaart worden gebracht of het aantal levende dieren van een bepaalde soort wellicht te laag is en er dus om actie wordt gevraagd om dit aantal omhoog te brengen door middel van bijvoorbeeld extra bescherming en het stimuleren van voortplanting. Echter, het proces van tellen is een enorm langdradig en routineus proces dat zich perfect zou lenen voor een meer geautomatiseerde vervanging in de vorm van een systeem dat gebruikt maakt van kunstmatige intelligentie (KI). Dit geautomatiseerde proces zou tot minder nodige mankracht én minder fouten kunnen leiden, waardoor er meer tijd en energie overblijft voor andere nuttige werkzaamheden.
 
+
 ## 2. Basismodel
 
 ### Introductie
-Het doel van het netwerk in het huidige project is om te voorspellen tot welke soort de vogel op een afbeelding die aan het netwerk wordt meegegeven behoort. Er is hierbij een mogelijke uitkomst van één van 325 verschillende vogelsoorten. 
+In dit project wordt een convolutioneel neuraal netwerk ontwikkeld dat inspiratie haalt uit het menselijk brein. Het netwerk is opgebouwd uit meerdere lagen, en elke laag bevat een aantal nodes. De lagen zijn met elkaar verbonden, waarbij er gebruik wordt gemaakt van gewichten en biasen. Deze worden geleerd aan de hand van trainingsdata. 
 
-Het huidige project helpt mee aan het immense probleem omtrent het toenemende aantal van bedreigde diersoorten op meerdere manieren. Als eerste biedt het ontwikkelde netwerk een manier om een afnemend aantal in bepaalde vogelsoorten vroegtijdig waar te kunnen nemen. Daarnaast doet het huidige netwerk dit op een manier waarbij minder beroep op de mens wordt gedaan en waarbij het tellen van vogels zowel sneller als met minder fouten kan plaatsvinden. Al met al belooft het huidige project een grote bijdrage aan het beschermen van een groot aantal vogelsoorten tegen uitsterven. 
+Om het netwerk meer interpreteerbaar te maken, zou men de nodes kunnen beschrijven als neuronen, en de verbindingen tussen de nodes als de synapsen. Bij het menselijk brein zijn er twee type visuele neuronen: simpele en complexe neuronen. Simpele visuele neuronen identificeren de hoeken van lijnen in de afbeeldingen. Complexe visuele neuronen hebben een groter receptief veld dan simpele neuronen, en nemen hierbij de output van simpele neuronen om zo vervolgens de afbeeldingen te classificeren. Complexe visuele neuronen kijken zo dus naar de combinaties van de output gegeven door de simpele visuele neuronen. Ons convolutioneel netwerk bestaat uit twee verschillende fases, de ‘feature extraction’ fase en de classificatie fase. In de ‘feature extraction’ fase leert het model verschillende features van de vogels. Dit doet het netwerk aan de hand van convolution en pooling. Convolution komt overeen met de werking van simpele visuele neuronen. Het houdt namelijk in dat er een filter over de afbeelding wordt geplaatst om zo de plaatsing en oriëntatie van de randen te vinden. De output van een convolution wordt een feature map genoemd. Pooling komt overeen met de werking van complexe visuele neuronen, waarbij de hoeveelheid data wordt gereduceerd en de meest belangrijke data wordt behouden. In de classificatie fase worden vervolgens de feature maps bij elkaar genomen in een vector, en wordt het netwerk geleerd te voorspellen welke vogelsoort hoort bij de gegeven afbeelding van een vogel. Het doel van het netwerk in dit project is dus om te voorspellen tot welke soort de vogel op een afbeelding die aan het netwerk wordt meegegeven behoort. Er is hierbij een mogelijke uitkomst van één van 325 verschillende vogelsoorten. 
+
+Het huidige project helpt mee aan het immense probleem omtrent het toenemende aantal van bedreigde diersoorten op meerdere manieren. Het netwerk dat tijdens dit project ontwikkeld wordt, biedt allereerst een manier om een afnemend aantal in bepaalde vogelsoorten vroegtijdig waar te nemen. Daarnaast doet het ontwikkelde netwerk dit op een manier waarbij minder beroep op de mens wordt gedaan en waarbij het tellen van vogels zowel sneller als met minder fouten kan plaatsvinden. Al met al belooft het huidige project een grote bijdrage aan het beschermen van een groot aantal vogelsoorten tegen uitsterven. 
 
 #### Specifieke probleem
 Het specifieke probleem dat in dit gedeelte van het eindrapport wordt behandeld is het in kaart brengen van de beschikbare data en haar eigenschappen. Verder is er een eerste model van het netwerk ontwikkeld dat als basis dient voor de komende versies en aanpassingen van het netwerk in de hoofdstukken die volgen.
 
 #### Overzicht model
-Voor de opbouw van het basismodel is gebruik gemaakt van de TensorFlow bibliotheek. Om te beginnen zijn een aantal basislagen aan het model toegevoegd. Hierbij zijn om en om twee Conv2D lagen en MaxPooling lagen gebruikt, gevolgd door een Flatten en Dense laag.
+Voor de opbouw van het basismodel is gebruik gemaakt van de TensorFlow bibliotheek. Om te beginnen zijn een aantal basislagen aan het model toegevoegd. Hierbij zijn om en om twee Conv2D lagen en MaxPooling lagen gebruikt voor de ‘feature extraction’ fase, gevolgd door een Flatten en Dense laag voor de classificatie fase. Er is gekozen om te beginnen met twee Conv2D en Maxpooling lagen in de ‘feature extraction’ fase, om zo het model de features te leren van de verschillende vogelsoorten. Omdat dit nog het basismodel is, hebben we besloten het model simpel te houden, en dus nog niet al te veel lagen toe te voegen. Zo kan namelijk gecheckt worden hoe opvallend de features van de verschillende vogelsoorten zijn, en hoe goed ze dus op een basisniveau al te onderscheiden zijn van elkaar. Verder hebben we in de classificatie fase één flatten laag, omdat de verschillende feature maps maar een keer tot een vector genomen hoeven te worden. Het toevoegen van slechts een dense layer is weer om het model zo simpel mogelijk te houden, en te kijken hoe goed het model al voorspelt als het nog niet al te complex is gemaakt.
+
+![image](https://user-images.githubusercontent.com/68432564/150953829-d48db968-be4f-4bde-87c1-4b0fba2d10be.png)
+
+Figuur 1: Model opbouw 
 
 ### Data Analyse en Voorverwerking
-De dataset 325 Birds Species te vinden op kaggle (https://www.kaggle.com/gpiosenka/100-bird-species) voorziet ons van alle data die nodig is om dit onderzoek uit te voeren. Deze dataset bestaat uit 50582 foto’s in totaal van 325 soorten vogels.  Elke soort vogel betreft minstens 120 afbeeldingen, zowel de mannelijke als de vrouwelijke variant. De afbeeldingen hebben als afmeting allemaal 224 (pixels) x 224 (pixels) x 3 (lagen). De drie lagen houden in dat de afbeeldingen volgens het RGB-systeem gekleurd zijn. Hieronder volgen een aantal voorbeeldafbeeldingen uit de dataset: 
+De dataset 325 Birds Species te vinden op [kaggle](https://www.kaggle.com/gpiosenka/100-bird-species) voorziet ons van alle data die nodig is om dit onderzoek uit te voeren. Deze dataset bestaat uit 50582 foto’s in totaal van 325 soorten vogels.  Elke soort vogel betreft minstens 120 afbeeldingen, zowel de mannelijke als de vrouwelijke variant. De afbeeldingen hebben als afmeting allemaal 224 (pixels) x 224 (pixels) x 3 (kanalen). De drie kanalen houden in dat de afbeeldingen volgens het RGB-systeem gekleurd zijn. Hieronder volgen een aantal voorbeeldafbeeldingen uit de dataset: 
 
-![image](https://user-images.githubusercontent.com/59557088/149712632-efcb392b-8414-4fa2-88e3-2b93c935677d.png)
+![image](https://user-images.githubusercontent.com/59557088/149712632-efcb392b-8414-4fa2-88e3-2b93c935677d.png)![image](https://user-images.githubusercontent.com/59557088/149712645-67429430-3e64-4bc8-9b5b-95367ac61687.png)![image](https://user-images.githubusercontent.com/59557088/149712619-b6f44347-bdc7-4648-be41-a59847b5dd03.png)
 
-Afbeelding 1
-
-![image](https://user-images.githubusercontent.com/59557088/149712645-67429430-3e64-4bc8-9b5b-95367ac61687.png)
-
-Afbeelding 2
-
-![image](https://user-images.githubusercontent.com/59557088/149712619-b6f44347-bdc7-4648-be41-a59847b5dd03.png)
-
-Afbeelding 3
+Afbeelding 1: Een aantal afbeeldingen uit de dataset ter illustratie.
 
 Binnen de dataset was al onderscheid gemaakt tussen training-, test- en validatiedata; de trainingsdata bevat 47332 afbeeldingen en de test- en validatiedata allebei 1625 afbeeldingen. Deze verdeling is zo optimaal mogelijk gedaan om een zo precies mogelijke voorspelling over de vogelsoort bij een afbeelding te kunnen maken. Vanwege deze verdeling die al in de dataset aanwezig was, is het niet nodig om een eigen onderverdeling te maken. 
 
