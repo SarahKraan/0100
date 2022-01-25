@@ -442,11 +442,7 @@ De verbetering van dit hoofdstuk vormt het slotstuk van de data augmentatie; wij
 
 Bronnen:
 1). https://towardsdatascience.com/analyzing-different-types-of-activation-functions-in-neural-networks-which-one-to-prefer-e11649256209
+
 2). https://www.tensorflow.org/api_docs/python/tf/keras/preprocessing/image/ImageDataGenerator
+
 3). https://www.kaggle.com/gpiosenka/100-bird-species
-
-
-
-
-
-
