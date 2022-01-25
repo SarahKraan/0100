@@ -32,14 +32,12 @@ Het specifieke probleem dat in dit gedeelte van het eindrapport wordt behandeld 
 Voor de opbouw van het basismodel is gebruik gemaakt van de TensorFlow bibliotheek. Om te beginnen zijn een aantal basislagen aan het model toegevoegd. Hierbij zijn om en om twee Conv2D lagen en MaxPooling lagen gebruikt voor de ‘feature extraction’ fase, gevolgd door een Flatten en Dense laag voor de classificatie fase. Er is gekozen om te beginnen met twee Conv2D en Maxpooling lagen in de ‘feature extraction’ fase, om zo het model de features te leren van de verschillende vogelsoorten. Omdat dit nog het basismodel is, hebben we besloten het model simpel te houden, en dus nog niet al te veel lagen toe te voegen. Zo kan namelijk gecheckt worden hoe opvallend de features van de verschillende vogelsoorten zijn, en hoe goed ze dus op een basisniveau al te onderscheiden zijn van elkaar. Verder hebben we in de classificatie fase één flatten laag, omdat de verschillende feature maps maar een keer tot een vector genomen hoeven te worden. Het toevoegen van slechts een dense layer is weer om het model zo simpel mogelijk te houden, en te kijken hoe goed het model al voorspelt als het nog niet al te complex is gemaakt.
 
 ![image](https://user-images.githubusercontent.com/68432564/150953829-d48db968-be4f-4bde-87c1-4b0fba2d10be.png)
-
 _Figuur 1:_ Model opbouw 
 
 ### Data Analyse en Voorverwerking
 De dataset 325 Birds Species te vinden op [kaggle](https://www.kaggle.com/gpiosenka/100-bird-species) voorziet ons van alle data die nodig is om dit onderzoek uit te voeren. Deze dataset bestaat uit 50582 foto’s in totaal van 325 soorten vogels.  Elke soort vogel betreft minstens 120 afbeeldingen, zowel de mannelijke als de vrouwelijke variant. De afbeeldingen hebben als afmeting allemaal 224 (pixels) x 224 (pixels) x 3 (kanalen). De drie kanalen houden in dat de afbeeldingen volgens het RGB-systeem gekleurd zijn. Hieronder volgen een aantal voorbeeldafbeeldingen uit de dataset: 
 
 ![image](https://user-images.githubusercontent.com/59557088/149712632-efcb392b-8414-4fa2-88e3-2b93c935677d.png)![image](https://user-images.githubusercontent.com/59557088/149712645-67429430-3e64-4bc8-9b5b-95367ac61687.png)![image](https://user-images.githubusercontent.com/59557088/149712619-b6f44347-bdc7-4648-be41-a59847b5dd03.png)
-
 _Afbeelding 1:_ Een aantal afbeeldingen uit de dataset ter illustratie.
 
 Binnen de dataset was al onderscheid gemaakt tussen training-, test- en validatiedata; de trainingsdata bevat 47332 afbeeldingen en de test- en validatiedata allebei 1625 afbeeldingen. Deze verdeling is zo optimaal mogelijk gedaan om een zo precies mogelijke voorspelling over de vogelsoort bij een afbeelding te kunnen maken. Vanwege deze verdeling die al in de dataset aanwezig was, is het niet nodig om een eigen onderverdeling te maken. 
@@ -61,7 +59,6 @@ Evaluatie door analyseren van de training en validatie resultaten:
 Na een aantal keer het model gerund te hebben is te zien dat het model overfit (zoals te zien is in de afbeelding hieronder). Dit is makkelijk te herkennen aan de trainingskosten die vrijwel op 0 zit na de 20 epochs terwijl de validatiekosten omhoog blijft gaan. Ook is te zien dat de accuraatheid van de validatiedata blijft steken tussen de 15 en 20% terwijl de trainingsdata een accuraatheid heeft van 95%. 
 
 ![image](https://user-images.githubusercontent.com/68432564/150954540-90615182-1eb1-4137-a656-4e3a4829d797.png)
-
 _Figuur 2:_ Model resultaten basismodel
 
 Het huidige model dient als basismodel om vanuit verder te werken maar is nog niet op het gewenste niveau. Het classificeren van de verschillende vogelsoorten gaat namelijk nog niet optimaal. De volgende stap is daarom om het model te optimaliseren.
@@ -102,56 +99,72 @@ In een tweede versie is de kans van deze dropout-lagen gehalveerd, om zo het eff
 Ten slotte is in een derde versie aan het basismodel slechts de eerste dropout-laag (tussen de twee Conv2D-lagen) met de gehalveerde kans toegevoegd. 
 
 ![image](https://user-images.githubusercontent.com/68432564/150954711-0938a785-cb09-44c5-9175-e7388b451a8d.png)
-
 _Figuur 3:_ Model opbouw 
 
+### Data Analyse en Voorverwerking
+In het geval van de verbetering in dit hoofdstuk is slechts het toevoegen van hidden layers vereist, en dus geen voorverwerking van data.
+
+### Model Pipeline en Training
+De enige aanvulling op het basismodel uit hoofdstuk 2 zijn de dropout-lagen; de data die aan het model gevoed wordt en het aantal epochs blijft gelijk. 
+
+In de eerste versie is allereerst tussen de twee Conv2D een dropout-laag met een kans van 0.4 toegevoegd, waarbij dus 40% van de nodes in deze laag naar 0 wordt gezet. Vervolgens is voor de flatten-laag een tweede dropout-laag met een kans van 0.2 toegevoegd.
+
+De tweede versie is qua volgorde van het model volledig gelijk, alleen zijn de kansen gehalveerd naar 0.2 voor de eerste dropout-laag en 0.1 voor de tweede dropout-laag.
+
+Ten slotte is in de derde versie slechts gebruik gemaakt van één dropout-laag. Deze is geplaatst tussen de twee Conv2D lagen in.
+
 ### Evaluatie en Conclusies
-De resultaten van de eerste versie die dropout-lagen bevat zijn terug te vinden in figuur 2 en bevatten twee grafieken van kosten en precisie. Opmerkelijk is dat het overfitten van het basismodel tegengegaan lijkt te zijn, aangezien de trainingskosten en validatiekosten dichter bij elkaar liggen. Echter valt ook op dat de precisie van de validatiedata omlaag is gegaan ten opzichte van het basismodel. Dat terwijl het tegengaan van overfitting bedoeld is om het model beter werkend te maken op validatiedata zodat deze preciezer voorspeld kan worden. Met deze lagere precisie voor de validatiedata vormt deze eerste versie van dropout-layers geen waardevolle aanvulling op het basismodel. Dit kan eraan liggen dat de dropout een te grote invloed had op het model, en dat met het verwijderen van deze datapunten te veel informatie van het model verloren is gegaan. Het model underfit dan, wat ook blijkt uit dat de kosten voor de trainingsdata in dit model een stuk hoger zijn en dat de precisie van voorspelling nooit de 1 benaderd. Het is daarom verstandig om in versie 2 een dropout toe te passen met lagere kansen.
+De resultaten van de eerste versie die dropout-lagen bevat zijn terug te vinden in figuur 2 en bevatten twee grafieken van kosten en accuraatheid. Opmerkelijk is dat het overfitten van het basismodel tegengegaan lijkt te zijn, aangezien de trainingskosten en validatiekosten dichter bij elkaar liggen. Echter valt ook op dat de accuraatheid van de validatiedata omlaag is gegaan ten opzichte van het basismodel. Dat terwijl het tegengaan van overfitting bedoeld is om het model beter werkend te maken op validatiedata zodat deze preciezer voorspeld kan worden. Met deze lagere accuraatheid voor de validatiedata vormt deze eerste versie van dropout-layers geen waardevolle aanvulling op het basismodel. Dit kan eraan liggen dat de dropout een te grote invloed had op het model, en dat met het naar 0 zetten van deze nodes te veel informatie van het model verloren is gegaan. Het model underfit dan, wat ook blijkt uit dat de kosten voor de trainingsdata in dit model een stuk hoger zijn en dat de accuraatheid van voorspelling nooit de 1 benaderd. Het is daarom verstandig om in versie 2 een dropout toe te passen met lagere kansen.
 
- ![image](https://user-images.githubusercontent.com/59557088/149712139-7a261f6f-d1ba-4b65-8862-cc78de30fc33.png)
+![image](https://user-images.githubusercontent.com/68432564/150955062-2a39cdd8-9fbd-4876-b5cd-a5d066f76a3f.png)
+_Figuur 4:_ Dropout 1: 0.4, dropout 2: 0.2
 
-Figuur 2: Dropout 1: 0.4, dropout 2: 0.2
+In figuur 5 is te zien dat deze mildere dropout inderdaad tot betere resultaten leidt; de accuraatheid van zowel de trainingsdata als de validatiedata is gestegen, en de kosten zijn gedaald. Echter zijn deze waarden nog altijd minder wenselijk dan het basismodel, waardoor deze versie van dropout ook geen waardevolle aanvulling is op het basismodel. 
 
-In figuur 3 is te zien dat deze mildere dropout inderdaad tot betere resultaten leidt; de precisie van zowel de trainingsdata als de validatiedata is gestegen, en de kosten zijn gedaald. Echter zijn deze waarden nog altijd minder wenselijk dan het basismodel, waardoor deze versie van dropout ook geen waardevolle aanvulling is op het basismodel. 
+![image](https://user-images.githubusercontent.com/68432564/150955122-aaec9143-1f67-4361-aaa5-c810ae47aefd.png)
+_Figuur 5:_ Dropout 1: 0.2, dropout 2: 0.1
 
- ![image](https://user-images.githubusercontent.com/59557088/149712165-3e90767c-3226-4058-a8d2-18bc81d5d23f.png)
+In figuur 6 met slechts de ene dropout-laag blijven de resultaten praktisch gelijk als voor de tweede versie. Hieruit valt te concluderen dat de aantasting van het basismodel vooral zit in de eerste dropout laag tussen de Conv2D-lagen in.
 
-Figuur 3: Dropout 1: 0.2, dropout 2: 0.1
+![image](https://user-images.githubusercontent.com/68432564/150955191-a1aaa68b-ec20-47b4-88a3-00a7680a0fa4.png)
+_Figuur 6:_ Dropout 1: 0.2
 
-In figuur 4 met slechts de ene dropout-laag blijven de resultaten praktisch gelijk als voor de tweede versie. Hieruit valt te concluderen dat de aantasting van het basismodel vooral zit in de eerste dropout laag tussen de Conv2D-lagen in.
+Ondanks dat dropout in dit hoofdstuk op meerdere manieren is geprobeerd, is er geen versie gevonden die een verbetering van het basismodel oplevert. Weliswaar is de mate van overfitting afgenomen doordat de trainings- en validatie resultaten dichterbij elkaar komen te liggen, maar dit gaat dusdanig ten koste van de validatie accuraatheid dat dit geen verbetering op het model oplevert. Wellicht dat bij een latere versie van het model dropout wel een verbetering van het model oplevert, maar in deze fase zullen wij teruggrijpen op het basismodel om op voort te bouwen. 
 
- ![image](https://user-images.githubusercontent.com/59557088/149712194-817606b3-2abd-4c3e-920f-5073e924c2f1.png)
-
-Figuur 4: Dropout 1: 0.2
-
-Ondanks dat dropout in dit hoofdstuk op meerdere manieren is geprobeerd, is er geen versie gevonden die een verbetering van het basismodel oplevert. Wellicht dat bij een latere versie van het model dropout wel een verbetering van het model oplevert, maar in deze fase zullen wij teruggrijpen op het basismodel om op voort te bouwen. 
-
-## Verdiepen van het netwerk
+## 4. Verdiepen van het netwerk
 
 ### Introductie
-Een reden dat de dropout-methode niet werkt zoals gewenst is dat het netwerk nog niet complex genoeg is. Wanneer het netwerk niet complex genoeg is kan de dropout-methode de accuraatheid van het model verlagen, zoals in het model in het voorgaande hoofdstuk het geval was. Doordat bepaalde input wordt weggenomen, worden de nodes aan de hand van minder datapunten getraind en eindigen de weights op waardes die minder optimaal zijn. Hoewel het doel van dropout is dat deze weights inderdaad veranderen doordat er minder datapunten mee worden genomen en zo minder overfitten, blijft wel het doel dat de accuraatheid van het gehele model, en dus juist de accuraatheid op de validatiedata,  hierdoor toeneemt. Omdat dit doel niet werd bereikt is voor het huidige hoofdstuk besloten het netwerk te verdiepen om zo de accuraatheid van het model hopelijk te verhogen. Wanneer het model dan nog steeds overfit, kan er een nieuwe poging worden gedaan om het overfitten tegen te gaan. Dit zal dan in een nieuw hoofdstuk worden besproken.
+Een mogelijke reden voor het niet werken van de dropout-methode kan zijn dat het netwerk nog niet complex genoeg is. Wanneer het netwerk niet complex genoeg is kan de dropout-methode de accuraatheid van het model verlagen, zoals in het model in het voorgaande hoofdstuk het geval was. Doordat bepaalde input wordt weggenomen, worden de nodes aan de hand van minder datapunten getraind en eindigen de weights op waardes die minder optimaal zijn. Hoewel het doel van dropout is dat deze weights inderdaad veranderen doordat er minder input mee wordt genomen en zo minder overfitten, blijft wel het doel dat de accuraatheid van het gehele model, en dus juist de accuraatheid op de validatiedata, hierdoor toeneemt. 
+
+Omdat dit doel niet werd bereikt is voor het huidige hoofdstuk besloten het netwerk te verdiepen om zo de accuraatheid van het model hopelijk te verhogen. Wanneer het model dan nog steeds overfit, kan er een nieuwe poging worden gedaan om het overfitten tegen te gaan. Dit zal dan in een nieuw hoofdstuk worden besproken.
 
 #### Specifieke probleem
-Het probleem van het huidige netwerk is dat deze nog niet complex genoeg is. De oplossing hiervoor is om het netwerk verder te verdiepen. Dit kan worden bereikt door extra lagen met nodes aan het netwerk toe te voegen.
+Het probleem van het beginmodel is dat dit nog niet complex genoeg is. De oplossing hiervoor is om het netwerk verder te verdiepen. Dit kan worden bereikt door extra lagen met nodes aan het netwerk toe te voegen.
 
 #### Veranderingen in het model
 Het huidige model neemt het basismodel uit hoofdstuk 2 opnieuw als basis. Aan dit model zijn twee extra Conv2D lagen toegevoegd inclusief MaxPooling lagen; een Conv2Dlaag met 128 nodes (en bijbehorende MaxPooling laag) en een Conv2D laag met 256 nodes (ook met bijbehorende MaxPooling laag).
+
+![image](https://user-images.githubusercontent.com/68432564/150955332-0cb7b2fc-d119-4102-bab7-287e5f6edea2.png)
+_Figuur 7:_ Model opbouw
 
 ### Data Analyse en Voorverwerking
 Ook in het geval van de verbeteringen in dit hoofdstuk zijn geen aanpassingen van de data nodig. 
 
 ### Model Pipeline en Training
-De data gebruikt voor de input is hetzelfde zoals in voorgaande hoofdstukken 2 en 3, evenals het aantal epochs (20). Als aanvulling op het basismodel is gekozen voor twee extra Conv2D lagen inclusief MaxPooling. De lagen bestaan ditmaal uit 128 en 256 nodes. Door het aantal nodes te vergroten kan het netwerk geïdentificeerde features tot op naar een steeds primairder basisniveau verkleinen. Opnieuw is ervoor gekozen om na de Conv2D lagen MaxPooling lagen toe te voegen die ervoor zorgen dat de extra tijd dat het trainen van het model kost met de twee extra lagen beperkt blijft.
+De data gebruikt voor de input is hetzelfde zoals in voorgaande hoofdstukken 2 en 3, evenals het aantal epochs (20). 
+
+Als aanvulling op het basismodel is gekozen voor twee extra Conv2D lagen inclusief MaxPooling. De lagen bestaan ditmaal uit 128 en 256 nodes. Door het aantal nodes te vergroten kan het netwerk geïdentificeerde features tot op naar een steeds primairder basisniveau verkleinen. Opnieuw is ervoor gekozen om na de Conv2D lagen MaxPooling lagen toe te voegen die ervoor zorgen dat de extra tijd dat het trainen van het model kost met de twee extra lagen beperkt blijft.
 
 ### Evaluatie en Conclusies
-De resultaten op de accuraatheid van het netwerk zijn terug te vinden in figuur 5.
+De resultaten op de accuraatheid van het netwerk zijn terug te vinden in figuur 8.
 De accuraatheid van de trainingsdata is nogmaals erg hoog, hoog in de 90%. De accuraatheid van de validatie data daarentegen, is ditmaal toegenomen ten opzichte van het basismodel en ligt nu tussen de 50 en 55%. Dit is een positieve verandering, een toename in de accuraatheid van de validatie data is gewenst om het netwerk te optimaliseren. Er is echter wel nog steeds sprake van overfitting, al is het verschil in de accuraatheid van de trainings- en validatie data met het huidige verdiepte netwerk wel een stuk lager en overfit het model dus wel wat minder. Door het toevoegen van de extra lagen is het netwerk zeker complexer geworden en dit is terug te zien in de toegenomen accuraatheid van de validatie data.
 
- ![image](https://user-images.githubusercontent.com/59557088/149712239-bcc3ab2c-4924-49da-9922-c1097eea15a1.png)
+![image](https://user-images.githubusercontent.com/68432564/150955406-e3cc9042-4eab-4624-9d2c-1717e92e44fb.png)
+_Figuur 8:_ Kosten en accuraatheid van het verdiepte netwerk bestaande uit vier lagen.
 
-Figuur 5: Kosten en accuraatheid van het verdiepte netwerk bestaande uit vier lagen.
+Een volgende stap om het overfitten van het netwerk tegen te gaan is om nogmaals methodes die overfitten tegengaan uit te proberen op het nieuwe verdiepte netwerk. Een veelbelovende methode om het overfitten tegen te gaan zou het aanpassen van de activatie functies kunnen zijn bij de verborgen lagen. Tot nu toe is gebruik gemaakt van de ReLu activatie functie. Een activatie functie die bij het huidige model minder neiging tot overfitten zou kunnen hebben is de Leaky ReLu functie.
 
-## Leaky ReLu activatie functies
+## 5. Leaky ReLu activatie functies
 
 ### Introductie
 Om overfitten tegen te gaan is een veelbelovende methode het aanpassen van de activatie functies van de verborgen lagen. Het huidige model bevat vier Conv2D-lagen waarin de nodes elk geactiveerd worden met ReLu-activaties. Deze activatiecode levert in de helft van de gevallen een activatiewaarde van 0 op, waarmee deze nodes niet meewerken bij het trainen van het model en ‘dode nodes’ zijn. Bij zeer weinig actieve nodes wordt de trainingsdata zeer precies nagebootsts en overfit het model gemakkelijk. Door de activatie functies aan te passen naar Leaky ReLu-activaties zullen er niet zoveel activatie waardes van 0 meer zijn, maar zullen deze activatie waardes bestaan uit negatieve waardes (onder de 0). Omdat de nodes niet meer verloren gaan, leveren de nodes nog steeds een bijdrage aan het trainen van het model. Hierdoor wordt het probleem met vele ‘dode nodes’ verholpen, en werken deze nodes wel mee om zo hopelijk overfitting tegen te gaan. 
@@ -160,94 +173,65 @@ Om overfitten tegen te gaan is een veelbelovende methode het aanpassen van de ac
 Het huidige probleem is nog steeds het overfitten van het huidige model. De oplossing die in het huidige hoofdstuk wordt aangedragen zijn het wijzigen van de ReLu-activaties naar Leaky ReLu-activaties. De nodes die door ReLu-activaties dode nodes opleveren worden met Leaky ReLu-activaties wel actief, en helpen zo het model minder specifiek de trainingsdata fitten om zo minder te overfitten.
 
 #### Veranderingen in het model
-In elke van de vier Conv2D-lagen is de ReLu-activatie functie vervangen door een Leaky-ReLu functie. De alpha - de hoek van de Leaky-ReLu functie- is in verschillende versies gevarieerd om zo de optimale waarde te vinden. 
+In elke van de vier Conv2D-lagen is de ReLu-activatie functie vervangen door een Leaky-ReLu functie. De alpha - de hoek van de Leaky-ReLu functie- is in verschillende versies gevarieerd om zo de optimale waarde te vinden.
+
+![image](https://user-images.githubusercontent.com/68432564/150955536-92922c40-f1c4-40ee-8a21-e30cb425b1ee.png)
+_Figuur 9:_ de ReLU en Leaky ReLU activaties 
+
+De ReLU (links) neemt de input en veranderd elke negatieve input naar 0, maar houdt alle input groter dan 0. Uit het toepassen van ReLU komt echter het probleem dat de kans aanwezig is dat er dode nodes worden gecreëerd. Om dit te voorkomen wordt overgeschakeld naar Leaky ReLU (rechts). De Leaky ReLU functie staat in de afbeelding met een voorbeeld waarde van 0.01. Deze waarde geeft aan hoe steil de functie loopt wanneer x lager is dan 0. In dit model gaan we testen met Leaky ReLU waardes van , 0.1, 0.2 en 0.3. 
 
 ### Data Analyse en Voorverwerking
 Bij deze verbeterstap is geen data analyse of voorverwerking van pas gekomen maar is de data gebruikt zoals in de vorige hoofdstukken.
 
 ### Model Pipeline en Training
 In versie 1 van deze verbeterstap is de alpha van de Leaky-ReLu functies ingesteld op 0.1.
-In versie 2 van deze verbeterstap is de alpha van de Leaky-ReLu functies verhoogd naar 0.2 om te kijken of dit een grotere validatie precisie oplevert. 
+
+In versie 2 van deze verbeterstap is de alpha van de Leaky-ReLu functies verhoogd naar 0.2 om te kijken of dit een grotere validatie accuraatheid oplevert. 
+
 In versie 3 van deze verbeterstap is de alpha van de Leaky-ReLu functies nogmaals verhoogd naar 0.3.
 
 ### Evaluatie en Conclusies
 
-In figuur 6 zijn de resultaten te zien van de eerste versie met een alpha van 0.1. Opmerkelijk is dat de validatie precisie een flinke sprong heeft gemaakt van 0.52 naar 0.60. Wat dat betreft heeft deze nieuwe activatiefunctie een zeer positieve invloed gehad. Echter is de vorm van de grafieken niet zozeer aangepast en blijft de precisie van de trainingsdata zowat gelijk, dus blijft het probleem van overfitting bestaan. Ook zijn de kosten voor validatie van het model gestegen.
+In figuur 10 zijn de resultaten te zien van de eerste versie met een alpha van 0.1. Opmerkelijk is dat de validatie accuraatheid een flinke sprong heeft gemaakt van 0.52 naar ongeveer 0.61. Wat dat betreft heeft deze nieuwe activatiefunctie een zeer positieve invloed gehad. Echter is de vorm van de grafieken niet zozeer aangepast en blijft de accuraatheid van de trainingsdata zowat gelijk, dus blijft het probleem van overfitting bestaan. Ook zijn de kosten voor validatie van het model gestegen.
+
+![image](https://user-images.githubusercontent.com/68432564/150955651-8077f24b-d993-4a25-9b75-fed170c80f13.png)
+![image](https://user-images.githubusercontent.com/68432564/150955689-a5e4f275-1fca-4495-a4cc-a4b4801cf78b.png)
+_Figuur 10:_ Kosten en accuraatheid met een alpha van 0.1 voor de Leaky-ReLu activaties
+
+In figuur 11 zijn de resultaten weergegeven wanneer de alpha is verhoogd naar 0.2. Hierbij kan niet echt iets worden gezegd over de toename of afname van de accuraatheid omdat die in eerste instantie afneemt naar 0.59 en in tweede instantie stijgt naar 0.62. Ook zijn de validatie kosten nog verder toegenomen.
+
+![image](https://user-images.githubusercontent.com/68432564/150955866-dd1d3772-7816-4e10-b4eb-bbef34ab85fa.png)
+![image](https://user-images.githubusercontent.com/68432564/150955923-d09a8283-4093-436d-b2d2-bcefb44c9c95.png)
+_Figuur 11:_ Kosten en accuraatheid met een alpha van 0.2 voor de Leaky-ReLu activaties
+
+In figuur 12 valt te zien dat de hogere alpha van 0.3 geen grotere validatie accuraatheid oplevert ten opzichte van een alpha van 0.1. De accuraatheid zit op 0.61 en 0.58 wat ongeveer hetzelfde resultaat is als de alpha van 0.2. Daarentegen zijn de validatie kosten wel weer verder toegenomen vergeleken bij een Leaky-Relu met een alpha van 0.1 en 0.2. Blijkbaar is de Leaky-ReLu functie hier dus te steil aflopend.
+
+![image](https://user-images.githubusercontent.com/68432564/150956045-db8cf545-96fa-4ed7-b4d6-c25ea220f15d.png)
+![image](https://user-images.githubusercontent.com/68432564/150956073-48b61a41-73ee-4619-95dc-655e45ff3587.png)
+_Figuur 12:_ Kosten en accuraatheid met een alpha van 0.3 voor de Leaky-ReLu activaties
+
+Na het testen van deze verschillende versies kan geconcludeerd worden dat een Leaky-ReLu activatie met een alpha van 0.1 de beste aanvulling vormt op ons basismodel. De validatie accuraatheid is daarmee iets hoger en dat is waar naar gestreefd dient te worden. Bovendien is dit verreweg het voordeligst kijkend naar de kosten. De kosten van een alpha van 0.3 zitten net boven de 100 terwijl de kosten van een alpha van 0.1 rond de 20 liggen. 
+
+Wanneer gebruik wordt gemaakt van (Leaky) ReLu activatie functies is het van belang dat deze non-lineair zijn om het netwerk diep te kunnen laten leren. Als de functies lineair zijn is de capaciteit van het netwerk om te leren niet optimaal. Een methode om er zeker van te zijn dat de Leaky ReLu activatie functies non-lineair zijn is het normaliseren van de trainingsdata voordat deze aan het netwerk wordt meegegeven.
 
 
-![image](https://user-images.githubusercontent.com/68432564/149932671-09b721f8-5663-4ea2-94f8-d62884a653f0.png)
-
-Figuur 6: Kosten en accuraatheid met een alpha van 0.1 voor de Leaky-ReLu activaties
-
-In figuur 7 zijn de resultaten weergegeven wanneer de alpha is verhoogd naar 0.2. Wederom is de validatie precisie toegenomen, hoewel marginaal tot 0.62. Ook zijn de validatie kosten nog verder toegenomen.
-
-![image](https://user-images.githubusercontent.com/68432564/149932730-b3366f9c-05e5-48f5-9a7b-96816b1dfe52.png)
-
-Figuur 7: Kosten en accuraatheid met een alpha van 0.2 voor de Leaky-ReLu activaties
-
-In figuur 8 valt te zien dat de hogere alpha van 0.3 geen grotere validatie precisie meer oplevert; deze is gedaald tot 0.58. Daarentegen zijn de validatie kosten wel weer verder toegenomen. Blijkbaar is de Leaky-ReLu functie hier dus te steil aflopend.
-
-![image](https://user-images.githubusercontent.com/68432564/149932768-afd0de69-df9a-42d0-9965-ab72fd9160ff.png)
-
-Figuur 8: Kosten en accuraatheid met een alpha van 0.3 voor de Leaky-ReLu activaties
-
-Na het testen van deze verschillende versies kan geconcludeerd worden dat een Leaky-ReLu activatie met een alpha van 0.2 de beste aanvulling vormt op ons basismodel. De validatie precisie is daarmee hoger en dat is waar naar gestreefd dient te worden. Om de aanhoudende overfitting van het netwerk verder tegen te gaan lijkt het ons verstandig om in de volgende vervolgstap te onderzoeken bij welke data het netwerk het meest de fout in gaat. Een goede vervolgstap zou daarom zijn om te analyseren bij welke vogelsoorten de classificatie niet correct verloopt, en de data hierop te augmenteren. Het lijkt ons verstandig om zo eerst de prestatie van het model bij de input aan te pakken, om vervolgens pas weer naar verdere verbeteringen tegen overfitting te kijken.
-
-
-## TEMPLATE
-
+## 6. Normaliseren van de afbeeldingen
 ### Introductie
-Wat gaan we doen, welk probleem pakken we aan met welke methode, uitleg methode. 
+Door de input data te normaliseren krijgt de input data een gemiddelde van 0. Leaky ReLu activatie functies zijn niet-lineair als de input ervan 0 is, en bij een neuraal netwerk dat gebruik maakt van (Leaky) ReLu activatie functies zoals de huidige is het van belang dat de lagen niet-lineair zijn om het netwerk diep te laten leren. Een model kan een voorspelling maken op basis van de activatie functies. Wanneer een lineaire activatie functie wordt meegegeven zal het model dus alleen een lineaire functie kunnen gebruiken om tot een voorspelling te komen. Deze voorspellingen zullen een stuk minder accuraat zijn dan wanneer een non-lineaire functie wordt gebruikt omdat deze functie een stuk complexere vormen aan kan nemen. 
+
+Het normaliseren van de input data heeft daarom als effect dat de Leaky ReLu activatie functies beter kunnen functioneren dan wanneer de input data niet genormaliseerd wordt. Een methode om de input data (training afbeeldingen) te normaliseren is door gebruik te maken van de ImageDataGenerator preprocesser tool (2). Deze methode functioneert door over de gehele dataset de afbeeldingen te normaliseren naar een gemiddelde van 0 en een standaarddeviatie van 1. Dit houdt in dat bijvoorbeeld een vaag gekleurde afbeelding met lage pixelwaardes evenveel meegerekend wordt als een afbeelding met hele felle kleuren. Verder helpt data preprocessen het model sneller te maken.
+
 #### Specifieke probleem
-… Specifieke probleem die deze versie probeert aan te pakken in 2 zinnen.
+Om de Leaky ReLu activatie functies zo goed mogelijk te laten functioneren is het van belang dat de input data genormaliseerd wordt. Wanneer dit niet wordt gedaan leert het netwerk minder diep vanwege dode nodes. 
+
 #### Veranderingen in het model
-… High level overview van veranderingen van dit model t.o.v. het vorige model.
+In de functie die wordt het gebruikt om het model te trainen en evalueren (train_en_evalueer) is het argument ‘preprocess’ toegevoegd met parameters ‘featurewise center’ en ‘featurewise standard deviation’ uit de keras bibliotheek.
 
 ### Data Analyse en Voorverwerking
-Mogelijke data analyse of aanpassingen in de data voor het runnen van nieuwe model:
+Alle data is dezelfde data die gebruikt werden in in de voorgaande netwerkversies. Er zijn dus geen aanpassingen aan de data gedaan. 
 
 ### Model Pipeline en Training
-Welke input begint het model mee:
-Wat voor type model is gebruikt (inclusief welke layers van welke grootte + welke activatie functie(s):
-Post processing steps vóór het maken van de voorspelling:
-Batch size / number of epochs:
+Het preprocess argument dat mee wordt genomen tijdens het trainen en evalueren van het netwerk transformeert de training afbeeldingen op de manieren die zijn meegegeven in de specifiek opgegeven parameters uit de ImageDataGenerator bibliotheek van keras. In deze versie zal gekeken worden naar het gebruik van ‘featurewise center’ en ‘featurewise standard deviation (hierna std) normalization’. ‘Featurewise’ center wijzigt de gemiddelde waarde van de inputdata naar 0. ‘Featurewise standard deviation normalization’ deelt elke inputwaarde door de bijbehorende standaarddeviatie waardoor de data een verdeling krijgt tussen de waardes -1 en 1. 
 
 ### Evaluatie en Conclusies
-Evaluatie door analyseren van de training en validatie resultaten:
-Vergelijken met het vorige model:
-Invoegen van visualisaties van het trainingsproces:
-Mogelijke trade-offs in vergelijking met vorige model (wat nu wellicht slechter gaat):
-Heeft dit model het probleem uit de introductie verholpen:
-Analyseren van mogelijke verdere verbeteringen (voor volgende hoofdstukken):
-## TEMPLATE
-
-### Introductie
-Wat gaan we doen, welk probleem pakken we aan met welke methode, uitleg methode. 
-#### Specifieke probleem
-… Specifieke probleem die deze versie probeert aan te pakken in 2 zinnen.
-#### Veranderingen in het model
-… High level overview van veranderingen van dit model t.o.v. het vorige model.
-
-### Data Analyse en Voorverwerking
-Mogelijke data analyse of aanpassingen in de data voor het runnen van nieuwe model:
-
-### Model Pipeline en Training
-Welke input begint het model mee:
-Wat voor type model is gebruikt (inclusief welke layers van welke grootte + welke activatie functie(s):
-Post processing steps vóór het maken van de voorspelling:
-Batch size / number of epochs:
-
-### Evaluatie en Conclusies
-Evaluatie door analyseren van de training en validatie resultaten:
-Vergelijken met het vorige model:
-Invoegen van visualisaties van het trainingsproces:
-Mogelijke trade-offs in vergelijking met vorige model (wat nu wellicht slechter gaat):
-Heeft dit model het probleem uit de introductie verholpen:
-Analyseren van mogelijke verdere verbeteringen (voor volgende hoofdstukken):
-
-Bronnen:
-1). https://towardsdatascience.com/analyzing-different-types-of-activation-functions-in-neural-networks-which-one-to-prefer-e11649256209
-2).
-https://www.tensorflow.org/api_docs/python/tf/keras/preprocessing/image/ImageDataGenerator
-
-
+In figuur 13 is te zien dat, ten opzichte van figuur 10, 11 en 12, de accuraatheid van de validatie data met ongeveer 10 procent is gestegen. Hierdoor kan worden gesteld dat het toevoegen van de preprocess technieken een positief resultaat heeft op de accuraatheid van het netwerk.
