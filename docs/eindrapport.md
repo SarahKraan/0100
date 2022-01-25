@@ -32,12 +32,14 @@ Het specifieke probleem dat in dit gedeelte van het eindrapport wordt behandeld 
 Voor de opbouw van het basismodel is gebruik gemaakt van de TensorFlow bibliotheek. Om te beginnen zijn een aantal basislagen aan het model toegevoegd. Hierbij zijn om en om twee Conv2D lagen en MaxPooling lagen gebruikt voor de ‘feature extraction’ fase, gevolgd door een Flatten en Dense laag voor de classificatie fase. Er is gekozen om te beginnen met twee Conv2D en Maxpooling lagen in de ‘feature extraction’ fase, om zo het model de features te leren van de verschillende vogelsoorten. Omdat dit nog het basismodel is, hebben we besloten het model simpel te houden, en dus nog niet al te veel lagen toe te voegen. Zo kan namelijk gecheckt worden hoe opvallend de features van de verschillende vogelsoorten zijn, en hoe goed ze dus op een basisniveau al te onderscheiden zijn van elkaar. Verder hebben we in de classificatie fase één flatten laag, omdat de verschillende feature maps maar een keer tot een vector genomen hoeven te worden. Het toevoegen van slechts een dense layer is weer om het model zo simpel mogelijk te houden, en te kijken hoe goed het model al voorspelt als het nog niet al te complex is gemaakt.
 
 ![image](https://user-images.githubusercontent.com/68432564/150953829-d48db968-be4f-4bde-87c1-4b0fba2d10be.png)
+
 _Figuur 1:_ Model opbouw 
 
 ### Data Analyse en Voorverwerking
 De dataset 325 Birds Species te vinden op [kaggle](https://www.kaggle.com/gpiosenka/100-bird-species) voorziet ons van alle data die nodig is om dit onderzoek uit te voeren. Deze dataset bestaat uit 50582 foto’s in totaal van 325 soorten vogels.  Elke soort vogel betreft minstens 120 afbeeldingen, zowel de mannelijke als de vrouwelijke variant. De afbeeldingen hebben als afmeting allemaal 224 (pixels) x 224 (pixels) x 3 (kanalen). De drie kanalen houden in dat de afbeeldingen volgens het RGB-systeem gekleurd zijn. Hieronder volgen een aantal voorbeeldafbeeldingen uit de dataset: 
 
 ![image](https://user-images.githubusercontent.com/59557088/149712632-efcb392b-8414-4fa2-88e3-2b93c935677d.png)![image](https://user-images.githubusercontent.com/59557088/149712645-67429430-3e64-4bc8-9b5b-95367ac61687.png)![image](https://user-images.githubusercontent.com/59557088/149712619-b6f44347-bdc7-4648-be41-a59847b5dd03.png)
+
 _Afbeelding 1:_ Een aantal afbeeldingen uit de dataset ter illustratie.
 
 Binnen de dataset was al onderscheid gemaakt tussen training-, test- en validatiedata; de trainingsdata bevat 47332 afbeeldingen en de test- en validatiedata allebei 1625 afbeeldingen. Deze verdeling is zo optimaal mogelijk gedaan om een zo precies mogelijke voorspelling over de vogelsoort bij een afbeelding te kunnen maken. Vanwege deze verdeling die al in de dataset aanwezig was, is het niet nodig om een eigen onderverdeling te maken. 
@@ -59,6 +61,7 @@ Evaluatie door analyseren van de training en validatie resultaten:
 Na een aantal keer het model gerund te hebben is te zien dat het model overfit (zoals te zien is in de afbeelding hieronder). Dit is makkelijk te herkennen aan de trainingskosten die vrijwel op 0 zit na de 20 epochs terwijl de validatiekosten omhoog blijft gaan. Ook is te zien dat de accuraatheid van de validatiedata blijft steken tussen de 15 en 20% terwijl de trainingsdata een accuraatheid heeft van 95%. 
 
 ![image](https://user-images.githubusercontent.com/68432564/150954540-90615182-1eb1-4137-a656-4e3a4829d797.png)
+
 _Figuur 2:_ Model resultaten basismodel
 
 Het huidige model dient als basismodel om vanuit verder te werken maar is nog niet op het gewenste niveau. Het classificeren van de verschillende vogelsoorten gaat namelijk nog niet optimaal. De volgende stap is daarom om het model te optimaliseren.
@@ -99,6 +102,7 @@ In een tweede versie is de kans van deze dropout-lagen gehalveerd, om zo het eff
 Ten slotte is in een derde versie aan het basismodel slechts de eerste dropout-laag (tussen de twee Conv2D-lagen) met de gehalveerde kans toegevoegd. 
 
 ![image](https://user-images.githubusercontent.com/68432564/150954711-0938a785-cb09-44c5-9175-e7388b451a8d.png)
+
 _Figuur 3:_ Model opbouw 
 
 ### Data Analyse en Voorverwerking
@@ -117,16 +121,19 @@ Ten slotte is in de derde versie slechts gebruik gemaakt van één dropout-laag.
 De resultaten van de eerste versie die dropout-lagen bevat zijn terug te vinden in figuur 2 en bevatten twee grafieken van kosten en accuraatheid. Opmerkelijk is dat het overfitten van het basismodel tegengegaan lijkt te zijn, aangezien de trainingskosten en validatiekosten dichter bij elkaar liggen. Echter valt ook op dat de accuraatheid van de validatiedata omlaag is gegaan ten opzichte van het basismodel. Dat terwijl het tegengaan van overfitting bedoeld is om het model beter werkend te maken op validatiedata zodat deze preciezer voorspeld kan worden. Met deze lagere accuraatheid voor de validatiedata vormt deze eerste versie van dropout-layers geen waardevolle aanvulling op het basismodel. Dit kan eraan liggen dat de dropout een te grote invloed had op het model, en dat met het naar 0 zetten van deze nodes te veel informatie van het model verloren is gegaan. Het model underfit dan, wat ook blijkt uit dat de kosten voor de trainingsdata in dit model een stuk hoger zijn en dat de accuraatheid van voorspelling nooit de 1 benaderd. Het is daarom verstandig om in versie 2 een dropout toe te passen met lagere kansen.
 
 ![image](https://user-images.githubusercontent.com/68432564/150955062-2a39cdd8-9fbd-4876-b5cd-a5d066f76a3f.png)
+
 _Figuur 4:_ Dropout 1: 0.4, dropout 2: 0.2
 
 In figuur 5 is te zien dat deze mildere dropout inderdaad tot betere resultaten leidt; de accuraatheid van zowel de trainingsdata als de validatiedata is gestegen, en de kosten zijn gedaald. Echter zijn deze waarden nog altijd minder wenselijk dan het basismodel, waardoor deze versie van dropout ook geen waardevolle aanvulling is op het basismodel. 
 
 ![image](https://user-images.githubusercontent.com/68432564/150955122-aaec9143-1f67-4361-aaa5-c810ae47aefd.png)
+
 _Figuur 5:_ Dropout 1: 0.2, dropout 2: 0.1
 
 In figuur 6 met slechts de ene dropout-laag blijven de resultaten praktisch gelijk als voor de tweede versie. Hieruit valt te concluderen dat de aantasting van het basismodel vooral zit in de eerste dropout laag tussen de Conv2D-lagen in.
 
 ![image](https://user-images.githubusercontent.com/68432564/150955191-a1aaa68b-ec20-47b4-88a3-00a7680a0fa4.png)
+
 _Figuur 6:_ Dropout 1: 0.2
 
 Ondanks dat dropout in dit hoofdstuk op meerdere manieren is geprobeerd, is er geen versie gevonden die een verbetering van het basismodel oplevert. Weliswaar is de mate van overfitting afgenomen doordat de trainings- en validatie resultaten dichterbij elkaar komen te liggen, maar dit gaat dusdanig ten koste van de validatie accuraatheid dat dit geen verbetering op het model oplevert. Wellicht dat bij een latere versie van het model dropout wel een verbetering van het model oplevert, maar in deze fase zullen wij teruggrijpen op het basismodel om op voort te bouwen. 
@@ -145,6 +152,7 @@ Het probleem van het beginmodel is dat dit nog niet complex genoeg is. De oploss
 Het huidige model neemt het basismodel uit hoofdstuk 2 opnieuw als basis. Aan dit model zijn twee extra Conv2D lagen toegevoegd inclusief MaxPooling lagen; een Conv2Dlaag met 128 nodes (en bijbehorende MaxPooling laag) en een Conv2D laag met 256 nodes (ook met bijbehorende MaxPooling laag).
 
 ![image](https://user-images.githubusercontent.com/68432564/150955332-0cb7b2fc-d119-4102-bab7-287e5f6edea2.png)
+
 _Figuur 7:_ Model opbouw
 
 ### Data Analyse en Voorverwerking
@@ -160,6 +168,7 @@ De resultaten op de accuraatheid van het netwerk zijn terug te vinden in figuur 
 De accuraatheid van de trainingsdata is nogmaals erg hoog, hoog in de 90%. De accuraatheid van de validatie data daarentegen, is ditmaal toegenomen ten opzichte van het basismodel en ligt nu tussen de 50 en 55%. Dit is een positieve verandering, een toename in de accuraatheid van de validatie data is gewenst om het netwerk te optimaliseren. Er is echter wel nog steeds sprake van overfitting, al is het verschil in de accuraatheid van de trainings- en validatie data met het huidige verdiepte netwerk wel een stuk lager en overfit het model dus wel wat minder. Door het toevoegen van de extra lagen is het netwerk zeker complexer geworden en dit is terug te zien in de toegenomen accuraatheid van de validatie data.
 
 ![image](https://user-images.githubusercontent.com/68432564/150955406-e3cc9042-4eab-4624-9d2c-1717e92e44fb.png)
+
 _Figuur 8:_ Kosten en accuraatheid van het verdiepte netwerk bestaande uit vier lagen.
 
 Een volgende stap om het overfitten van het netwerk tegen te gaan is om nogmaals methodes die overfitten tegengaan uit te proberen op het nieuwe verdiepte netwerk. Een veelbelovende methode om het overfitten tegen te gaan zou het aanpassen van de activatie functies kunnen zijn bij de verborgen lagen. Tot nu toe is gebruik gemaakt van de ReLu activatie functie. Een activatie functie die bij het huidige model minder neiging tot overfitten zou kunnen hebben is de Leaky ReLu functie.
@@ -176,6 +185,7 @@ Het huidige probleem is nog steeds het overfitten van het huidige model. De oplo
 In elke van de vier Conv2D-lagen is de ReLu-activatie functie vervangen door een Leaky-ReLu functie. De alpha - de hoek van de Leaky-ReLu functie- is in verschillende versies gevarieerd om zo de optimale waarde te vinden.
 
 ![image](https://user-images.githubusercontent.com/68432564/150955536-92922c40-f1c4-40ee-8a21-e30cb425b1ee.png)
+
 _Figuur 9:_ de ReLU en Leaky ReLU activaties 
 
 De ReLU (links) neemt de input en veranderd elke negatieve input naar 0, maar houdt alle input groter dan 0. Uit het toepassen van ReLU komt echter het probleem dat de kans aanwezig is dat er dode nodes worden gecreëerd. Om dit te voorkomen wordt overgeschakeld naar Leaky ReLU (rechts). De Leaky ReLU functie staat in de afbeelding met een voorbeeld waarde van 0.01. Deze waarde geeft aan hoe steil de functie loopt wanneer x lager is dan 0. In dit model gaan we testen met Leaky ReLU waardes van , 0.1, 0.2 en 0.3. 
@@ -196,18 +206,21 @@ In figuur 10 zijn de resultaten te zien van de eerste versie met een alpha van 0
 
 ![image](https://user-images.githubusercontent.com/68432564/150955651-8077f24b-d993-4a25-9b75-fed170c80f13.png)
 ![image](https://user-images.githubusercontent.com/68432564/150955689-a5e4f275-1fca-4495-a4cc-a4b4801cf78b.png)
+
 _Figuur 10:_ Kosten en accuraatheid met een alpha van 0.1 voor de Leaky-ReLu activaties
 
 In figuur 11 zijn de resultaten weergegeven wanneer de alpha is verhoogd naar 0.2. Hierbij kan niet echt iets worden gezegd over de toename of afname van de accuraatheid omdat die in eerste instantie afneemt naar 0.59 en in tweede instantie stijgt naar 0.62. Ook zijn de validatie kosten nog verder toegenomen.
 
 ![image](https://user-images.githubusercontent.com/68432564/150955866-dd1d3772-7816-4e10-b4eb-bbef34ab85fa.png)
 ![image](https://user-images.githubusercontent.com/68432564/150955923-d09a8283-4093-436d-b2d2-bcefb44c9c95.png)
+
 _Figuur 11:_ Kosten en accuraatheid met een alpha van 0.2 voor de Leaky-ReLu activaties
 
 In figuur 12 valt te zien dat de hogere alpha van 0.3 geen grotere validatie accuraatheid oplevert ten opzichte van een alpha van 0.1. De accuraatheid zit op 0.61 en 0.58 wat ongeveer hetzelfde resultaat is als de alpha van 0.2. Daarentegen zijn de validatie kosten wel weer verder toegenomen vergeleken bij een Leaky-Relu met een alpha van 0.1 en 0.2. Blijkbaar is de Leaky-ReLu functie hier dus te steil aflopend.
 
 ![image](https://user-images.githubusercontent.com/68432564/150956045-db8cf545-96fa-4ed7-b4d6-c25ea220f15d.png)
 ![image](https://user-images.githubusercontent.com/68432564/150956073-48b61a41-73ee-4619-95dc-655e45ff3587.png)
+
 _Figuur 12:_ Kosten en accuraatheid met een alpha van 0.3 voor de Leaky-ReLu activaties
 
 Na het testen van deze verschillende versies kan geconcludeerd worden dat een Leaky-ReLu activatie met een alpha van 0.1 de beste aanvulling vormt op ons basismodel. De validatie accuraatheid is daarmee iets hoger en dat is waar naar gestreefd dient te worden. Bovendien is dit verreweg het voordeligst kijkend naar de kosten. De kosten van een alpha van 0.3 zitten net boven de 100 terwijl de kosten van een alpha van 0.1 rond de 20 liggen. 
@@ -237,6 +250,7 @@ Het preprocess argument dat mee wordt genomen tijdens het trainen en evalueren v
 In figuur 13 is te zien dat, ten opzichte van figuur 10, 11 en 12, de accuraatheid van de validatie data met ongeveer 10 procent is gestegen. Hierdoor kan worden gesteld dat het toevoegen van de preprocess technieken een positief resultaat heeft op de accuraatheid van het netwerk.
 
 ![image](https://user-images.githubusercontent.com/68432564/150956269-ee1d59ce-0ce9-433d-8783-221e89a7452e.png)
+
 _Figuur 13:_ Kosten en accuraatheid bij toepassen van normalisatie.
 
 Na gezien te hebben dat de Leaky ReLU goed is geïmplementeerd, kan weer worden gekeken naar het overfitten. Er is wellicht niet genoeg (verschillende) data in sommige klassen waardoor die klassen heel lastig zijn om goed te voorspellen. Om dit op te lossen kan worden gekeken naar de klassen die het slechtst worden voorspeld. Het doel is om te achterhalen waarom deze klassen zo slecht worden voorspeld. Wellicht bestaan deze klassen uit te weinig data om het netwerk goed te trainen en kan het netwerk hierdoor bepaalde features van de vogelsoorten niet goed leren.  
@@ -263,6 +277,7 @@ De vogelsoorten ‘SPOTTED CATBIRD’ (116), ‘CASSOWARY’ (119), ‘BLACK SWA
 De vogelsoorten ‘HOUSE FINCH’ (249), 'OVENBIRD' (233), 'D-ARNAUDS BARBET' (233), 'SWINHOES PHEASANT' (217), 'WOOD DUCK' (214) komen het meest voor, waarbij de ‘HOUSE FINCHhet meest voorkomt (249 keer). De meest voorkomende vogelsoort komt dus meer dan twee keer zo veel voor in de dataset dan de minst voorkomende vogelsoort.
 
 ![image](https://user-images.githubusercontent.com/68432564/150956410-87485061-b37d-4ece-8cd1-77f8d6b9da0e.png)
+
 _Figuur 14:_ Overzicht van de hoeveelheid trainingsafbeeldingen per vogelsoort.
 
 De trainingsdata bevat van sommige vogelsoorten een stuk meer afbeeldingen dan van andere vogelsoorten. Dit zou er mogelijk toe kunnen leiden dat vogelsoorten met weinig afbeeldingen slechter voorspeld worden door het netwerk omdat hier weinig data voorhanden is, en daarmee bijdragen aan een lage accuraatheid. 
@@ -294,6 +309,7 @@ Op het moment dat het model de verwachte waarden fit, wordt de dictionary ingevo
 Op basis van de kosten en accuraatheid weergeven in figuur 14 valt te concluderen dat het zwaarder mee laten wegen van ondervertegenwoordigde trainingsdata en het lichter mee laten wegen van oververtegenwoordigde trainingsdata in de kostenfunctie helaas niet heeft geleid tot een beter voorspellend model; sterker nog, het model voorspelt nu slechter dan voor deze aanpassing. Weliswaar komt de kostenfunctie nog wel overeen met de eerdere situatie, maar is de validatie accuraatheid teruggelopen van rond de 0.7 naar 0.65. Hoewel de trainingsdata nu verschillend meewegen in de kostenfunctie aan de hand van hoe de trainingsdata verdeeld zijn, voorspelt het model nu slechter door het zwaarder wegen van de soorten die weinig voorkwamen. Een conclusie die hieraan te verbinden valt is dat de specifieke vogelsoorten die weinig voorkomen in de trainingsdata lastiger te voorspellen zijn dan vogelsoorten die veel voorkomen in de trainingsdata. Door deze data dan zwaarder mee te laten wegen neemt de algehele validatie accuraatheid af.
 
 ![image](https://user-images.githubusercontent.com/68432564/150956494-753b1ecc-ecb2-45fb-a53c-90df5a6d2852.png)
+
 _Figuur 15:_ Kosten en accuraatheid van het model waarbij ondervertegenwoordigde trainingsdata zwaarder meewegen in de kostenfunctie, en oververtegenwoordigde trainingsdata minder zwaar meewegen.
 
 Omdat het verschillend mee laten wegen van de trainingsdata in de kostenfunctie geen effect oplevert, lijkt het ons verstandig om in de volgende vervolgstap te onderzoeken bij welke data het netwerk het meest de fout in gaat. De voorspelling die volgt uit het huidige hoofdstuk is dan dat de vogelsoorten die uit minder trainingsafbeeldingen bestaan het lastigst te classificeren zijn. Om deze hypothese te testen is een goede vervolgstap om te analyseren bij welke vogelsoorten de classificatie niet correct verloopt. De bevindingen die hieruit worden opgedaan kunnen verder worden verwerkt en geprobeerd tegen te gaan door passende data augmentatie toe te passen. 
@@ -323,35 +339,45 @@ De 5 vogelsoorten die het slechtst herkend worden zijn: 'PHILIPPINE EAGLE', 'ELL
 Hieronder volgen deze vogelsoorten met 3 bijbehorende afbeeldingen.
 
 ![image](https://user-images.githubusercontent.com/68432564/150956669-5cbc20a7-5219-4dca-aaa8-b71e44c7b206.png)
+
 _Afbeelding 2:_ Drie afbeeldingen van de Philippine Eagle.
 
 ![image](https://user-images.githubusercontent.com/68432564/150956781-6d8970ed-0cb6-484a-9517-ac2b195385f0.png)
+
 _Afbeelding 3:_ Drie afbeeldingen van de Elliots Pheasant.
 
 ![image](https://user-images.githubusercontent.com/68432564/150956831-98e86d44-8185-41cf-adec-bbb6fb48a61b.png)
+
 _Afbeelding 4:_ Drie afbeeldingen van de Gray Partridge.
 
 ![image](https://user-images.githubusercontent.com/68432564/150956905-b7de6b23-e28c-455f-8a65-c1b3035a73da.png)
+
 _Afbeelding 5:_ Drie afbeeldingen van de Dark Eyed Junco.
 
 ![image](https://user-images.githubusercontent.com/68432564/150956961-600dd67a-60b1-4eab-bc25-fb0cfb0d31e4.png)
+
 _Afbeelding 6:_ Drie afbeeldingen van de Strawberry Finch.
 
 De 5 vogelsoorten die het best herkend worden zijn: 'STRIPPED MANAKIN', 'AFRICAN FIREFINCH', 'SNOWY EGRET', 'GOLD WING WARBLER’ en de 'RED NAPED TROGON’. Hieronder volgen deze vogelsoorten met 3 bijbehorende afbeeldingen.
 
 ![image](https://user-images.githubusercontent.com/68432564/150957035-93d8ccc8-5c46-4a97-a4bc-e91a446caeea.png)
+
 _Afbeelding 7:_ Drie afbeeldingen van de Stripped Manakin.
 
 ![image](https://user-images.githubusercontent.com/68432564/150957110-fa6bcb30-4281-4a3e-b66d-76288fd3cc18.png)
+
 _Afbeelding 8:_ Drie afbeeldingen van de African Firefinch.
 
 ![image](https://user-images.githubusercontent.com/68432564/150957171-22f09707-9e68-4bbb-9dfa-c1a0721ae11c.png)
+
 _Afbeelding 9:_ Drie afbeeldingen van de Snowy Egret.
 
 ![image](https://user-images.githubusercontent.com/68432564/150957226-dbdf148c-4a8f-4bc5-81ed-1942e6ac9238.png)
+
 _Afbeelding 10:_ Drie afbeeldingen van de Gold Wing Warbler.
 
 ![image](https://user-images.githubusercontent.com/68432564/150957274-d9dd6594-cdb7-4d45-8ca4-432716704769.png)
+
 _Afbeelding 11:_ Drie afbeeldingen van de Red Naped Trogon.
 
 Op te maken uit de afbeeldingen van de slechtst herkenbare en best herkenbare vogelsoorten is voornamelijk het verschil in kleur. De vogels die het vaakst correct worden geclassificeerd zijn vogels met opvallende kleuren. De vogels die het minst vaak correct worden geclassificeerd daarentegen zijn vogels met onopvallende kleuren. Daarnaast lijken deze onopvallende kleuren meer op de achtergronden waarop de vogels afgebeeld zijn. De vogels die het slechts worden geclassificeerd lijken hierdoor meer weg te vallen. Om het netwerk beter te trainen zijn twee opties mogelijk; ofwel het vermeerderen van de trainingsdata ofwel de beschikbare trainingsdata zo bewerken dat het netwerk meer van de data leert. Het vermeerderen van de data door middel van data augmentatie en het verwerken van de bevindingen van dit hoofdstuk door de bestaande trainingsafbeeldingen te bewerken zal in de komende twee hoofdstukken één voor één behandeld worden.
@@ -379,6 +405,7 @@ De aanpassing van dit hoofdstuk heeft geen invloed op de Model Pipeline
 Bestudering van de resultaten van dit hoofdstuk in figuur 16 leidt tot de conclusie dat er mooie progressie is geboekt met toevoeging van de horizontale spiegelingen in de trainingsdata. Gelijk valt op dat de validatie accuraatheid is gestegen van 0.7 naar 0.75. Ook zijn de validatie kosten gedaald en zijn de lijnen van training- en validatie accuraatheid dichterbij elkaar komen te liggen. Hieruit valt op te maken dat overfitten weer deels is verholpen. Dit zijn allemaal gewenste resultaten. De keerzijde is wel dat het model langzamer is geworden, vanwege de toevoeging van de gespiegelde afbeeldingen aan de trainingsdata. Het kost nu meer tijd om deze grotere trainingsset te verwerken. Aangezien deze augmentatie zich slechts richtte op het verkrijgen van meer trainingsdata - een vrij algemene stap naar verbetering bij het bouwen van een model - kan op basis van de diepgaande data-analyse ook nog gekeken worden naar augmentaties die specifiek gericht zijn op vogelsoorten die slecht voorspeld zijn.
 
 ![image](https://user-images.githubusercontent.com/68432564/150957358-65119ad2-55aa-4dff-bded-857c88b0b0b5.png)
+
 _Figuur 16:_ Kosten en accuraatheid bij horizontaal gespiegelde afbeeldingen in trainingsdata.
 
 MILESTONE 4 deel 3
@@ -402,21 +429,21 @@ Om het model te trainen met de ingezoomde data wordt het preprocess argument in 
 De zoom bereiken waar naar wordt gekeken zijn [0.75, 1] en [0.5, 0.75]. Het resultaat van de eerste zoom range staat afgebeeld in figuur 17. Te zien is dat de accuraatheid van het model omhoog is gegaan naar 77%. Dit is een verbetering van 3% t.o.v. het invoegen van de horizontal flip. 
 
 ![image](https://user-images.githubusercontent.com/68432564/150957528-20f48b34-7c49-4e69-b56c-9e30d39cac0a.png)
+
 _Figuur 17:_ Kosten en accuraatheid bij een zoom range van [0.75, 1]
 
 Naast het kijken naar een zoom range van [0.75, 1] willen we ook zien of er meer op de vogels gefocust kan worden. Deze zoom gaf echter minder succes dan de eerdere zoom. De zoom van [0.5, 0.75] staat afgebeeld in figuur 18. Te zien is dat er een grote hap is genomen uit de accuraatheid. De accuraatheid ligt op 68% terwijl deze hiervoor naar 77% was gebracht.
 
 ![image](https://user-images.githubusercontent.com/68432564/150957637-613e6fa7-81b7-4ddb-ae77-5c76b8f5db14.png)
-Figuur 18: Kosten en accuraatheid bij een zoom range van [0.5, 0.75]
+
+_Figuur 18:_ Kosten en accuraatheid bij een zoom range van [0.5, 0.75]
 
 De verbetering van dit hoofdstuk vormt het slotstuk van de data augmentatie; wij hebben nu enkele methoden uitgeprobeerd en zijn tevreden met de geboekte resultaten. Echter is er nog voldoende progressie te boeken, en vindt er ook zeker nog overfitting plaats. Daarom gaan wij in het volgende hoofdstuk weer verder met nieuwe methodes om overfitting tegen te gaan.
 
 Bronnen:
 1). https://towardsdatascience.com/analyzing-different-types-of-activation-functions-in-neural-networks-which-one-to-prefer-e11649256209
-2).
-https://www.tensorflow.org/api_docs/python/tf/keras/preprocessing/image/ImageDataGenerator
-3). 
-https://www.kaggle.com/gpiosenka/100-bird-species
+2). https://www.tensorflow.org/api_docs/python/tf/keras/preprocessing/image/ImageDataGenerator
+3). https://www.kaggle.com/gpiosenka/100-bird-species
 
 
 
