@@ -512,7 +512,8 @@ Er zijn geen wijzigingen aangebracht in de data die voor als eerste input gebrui
 Op elk kanaal wordt de batchnormalisatie toegepast. De input van alle kanalen wordt genormaliseerd door deze te centreren en te schalen aan de hand van de aanleerbare parameters gamma en beta. Deze parameters worden geüpdate door middel van gradient descent. 
 
 ### Evaluatie en Conclusies
-Een aantal verschillende hoeveelheden van batchnormalisatie zijn toegepast op het netwerk. Batchnormalisatie is toegepast op ofwel alle vier de kanalen, ofwel drie ofwel twee. Uit de resultaten is op te maken dat deze versies niet veel van elkaar verschillen. Wat duidelijk merkzaam is is dat de lijn die de validatie accuratie weergeeft nog verder lijkt te stijgen na het runnen van 20 epochs.
+Een aantal verschillende hoeveelheden van batchnormalisatie zijn toegepast op het netwerk. Batchnormalisatie is toegepast op ofwel alle vier de kanalen, ofwel drie ofwel twee. Uit de resultaten is op te maken dat batchnormalisatie de accuratie validatie laat toenemen van rond de 77% tot rond de 80% en dat deze versies niet veel van elkaar verschillen. Wat duidelijk merkzaam is is dat de lijn die de validatie accuratie weergeeft nog verder lijkt te stijgen na het runnen van 20 epochs. 
+
 
 ![image](https://user-images.githubusercontent.com/68432564/151187947-6b4c24d8-9bc5-4f41-a991-2619d789aad2.png)
 
@@ -526,7 +527,7 @@ _Figuur 24:_ Netwerk met drie batchnormalisatie lagen.
 
 _Figuur 25:_ Netwerk met twee batchnormalisatie lagen.
 
-
+Het is dus mogelijk dat de validatie accuratie verder toeneemt wanneer er meer epochs worden gerund waardoor het netwerk langer kan worden getraind. Het uiteindelijke model dat wordt gekozen om te finaliseren is het netwerk waarbij op drie kanalen batchnormalisatie is toegepast. Hiervoor is gekozen omdat bij dit netwerk het meest duidelijk te zien is dat de validatie accuratie nog verder zou kunnen stijgen. Dit netwerk zal in het volgende hoofdstuk voor 200 epochs worden gerund om te kijken of de validatie accuratie nog verder toeneemt.
 
 Bronnen:
 
