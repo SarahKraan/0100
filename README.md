@@ -20,24 +20,20 @@ Het huidige project bestaat uit de volgende onderdelen te vinden in deze reposit
   * /code/basismodel: Bevat een Google Colab link naar de code voor het basismodel.
 
 ## Vereisten
-De code van dit model is geschreven in Python 3.6.9. De vereiste bibliotheken en/of programma's die nodig zijn om de code van het huidige project te runnen zijn:
-* import numpy as np
-* import cv2
-* import os
-* from PIL import Image
-* import pandas as pd
-* import tensorflow as tf
-* import matplotlib.pyplot as plt
-* from tensorflow.keras import layers, models, preprocessing
-* from tensorflow.keras.utils import to_categorical
-* from sklearn.preprocessing import LabelEncoder
+De code van dit model is geschreven in Python 3.6.9. De vereiste packages die nodig zijn om de code van het huidige project uit te voeren worden weergeven in de requirements.txt. Om de packages te installeren kan gebruik worden gemaakt van pip, door middel van het uitvoeren van de hieronder weergeven instructie:
+
+```
+pip install -r requirements.txt
+```
+
 
 ## Gebruiksaanwijzing
-Instructies om het netwerk model te gebruiken zijn als volgt:
-1. Download de '325 Bird Species - Classification' dataset op uw computer via de link: https://www.kaggle.com/gpiosenka/100-bird-species
-2. Voeg aan uw Google Drive een map toe genaamd: 'AIproject'
-3. In de map 'AIproject', upload de '325 Bird Species - Classification' dataset
-4. Open het model via de map '/code/basismodel' in de repository, en voer het programma uit.
+Om het model uit te voeren, moet de data van de afbeeldingen van de vogels beschikbaar worden gemaakt. Dit kan op 2 manieren:
+1. Door middel van de data te downloaden en toe te voegen aan uw Google Drive. Hiervoor moet de data gedownload worden van de '325 Bird Species - Classification' dataset op uw computer via de link: https://www.kaggle.com/gpiosenka/100-bird-species. Vervolgens voegt u de gedownloade data toe aan uw Google Drive onder een map genaamd: 'AIproject'. In de map 'AIproject' upload u de '325 Bird Species - Classification' dataset.
+2. Door middel van het gebruik te maken van uw API token. Hiervoor gaat u naar de website www.kaggle.com en vervolgens naar uw account. Hier klikt u op 'Create New API token'. Er wordt een kaggle.json bestand gedownload op uw computer. Dit json bestand kunt u vervolgens uploaden wanneer u de code van het model runt.
+
+Nadat u de data hebt ingeladen, opent u het model via de map '/code/basismodel' in de repository, en voert u het programma uit.
+
 
 ## Auteurs
 * Sarah Kraan
