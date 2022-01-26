@@ -440,7 +440,96 @@ _Figuur 18:_ Kosten en accuraatheid bij een zoom range van [0.5, 0.75]
 
 De verbetering van dit hoofdstuk vormt het slotstuk van de data augmentatie; wij hebben nu enkele methoden uitgeprobeerd en zijn tevreden met de geboekte resultaten. Echter is er nog voldoende progressie te boeken, en vindt er ook zeker nog overfitting plaats. Daarom gaan wij in het volgende hoofdstuk weer verder met nieuwe methodes om overfitting tegen te gaan.
 
+MILESTONE 4 deel 4
+
+## Drop-out methode op verdiept netwerk
+
+### Introductie
+Een welbekende methode tegen overfitting die ook al eerder in dit verslag toegepast is, is Dropout. In deze eerdere poging bleek dat het model nog niet complex genoeg was om Dropout toe te passen; in dat geval zorgde de Dropout voor het verlies van te veel essentiële informatie, waardoor de validatie accuraatheid afnam. Aangezien het huidige model wel meerdere lagen bevat, lijkt het dat Dropout nu wel tot een vermindering van overfitting kan leiden. 
+
+#### Specifieke probleem
+Het probleem dat getackeld dient te worden met deze ingreep is het overfitten van de trainingsdata door het model. Door op basis van kans delen van de input in bepaalde epochs niet mee te nemen wordt de invloed van input die veel ruis veroorzaakt verkleind.
+
+#### Veranderingen in het model
+Wederom zijn er drie versies van Dropout toegepast, om zo de optimale toepassing te vinden. 
+
+In de eerste versie zijn de meeste Dropout-lagen toegevoegd, drie om precies te zijn. 
+
+In versie twee is de laatste Dropout-laag verwijderd, om te kijken of dit tot een beter resultaat leidt. Er is gekozen om de laatste van de drie lagen te verwijderen, omdat op dit moment het model al vrij vergaand getraind is, en Dropout op dit moment eerder zou leiden tot verlies van informatie. 
+
+In de laatste versie, versie drie, is de tweede Dropout-laag ook verwijderd en blijft slechts de eerste laag over. 
+
+### Data Analyse en Voorverwerking
+Bij deze verbeterstap is geen data analyse of voorverwerking van pas gekomen maar is de data gebruikt zoals in de vorige hoofdstukken.
+
+### Model Pipeline en Training
+Het voorgaande model is aangevuld met drie Dropout-lagen, die telkens na de MaxPooling-lagen geplaatst zijn. De waarschijnlijkheid in deze lagen is gesteld op 0.2, een redelijk lage waarde die niet tot al te extreme Dropout zal leiden. In figuur 19 is te zien hoe dit voor versie 1 eruit komt te zien. In de latere versies zijn slechts Dropout-lagen hieruit verwijderd, dus dit geeft een goede impressie.
+
+![image](https://user-images.githubusercontent.com/68432564/151187282-1caff67c-7959-4f51-940a-46d16f775647.png)
+
+_Figuur 19:_ Model-summary bij toevoeging van de drie Dropout-lagen (versie 1)
+
+### Evaluatie en Conclusies
+
+In figuur 20 zijn de bevindingen van versie 1 weergegeven. Te zien valt dat de overfitting is tegengegaan door toevoeging van de drie Dropout-lagen. De grafieken van training en validatie liggen voor zowel de kosten als accuraatheid dichterbij elkaar; de accuraatheid van de validatie data is niet gestegen maar nog exact hetzelfde, maar de accuraatheid van de trainingsdata is wel gedaald. Ook verloopt de asymptoot van de accuraatheid van de trainingsdata minder steil en haalt deze nu niet meer de 0.9, wat inhoudt dat het model minder snel gewend raakt aan de specifieke ruis van de trainingsdata. Daarnaast valt op dat de kosten voor de validatie data een minder sterk stijgende lijn vertonen, wat betekent dat deze minder oploopt naarmate het model meer gaat overfitten op de trainingsdata.
+
+![image](https://user-images.githubusercontent.com/68432564/151187536-7e3b3f8f-2ff7-4f08-bf2d-f2ffeedd0e16.png)
+
+_Figuur 20:_ Kosten en accuraatheid bij drie Dropout-lagen van 0.2.
+
+In figuur 21 zijn de resultaten van versie twee weergegeven. Hieruit blijkt dat het weglaten van de laatste Dropout-laag vrij weinig invloed heeft op de vorm van de grafieken. Wel valt op dat de accuraatheid van de validatie data is gedaald met 0.03 tot 0.74. 
+
+![image](https://user-images.githubusercontent.com/68432564/151187628-246b630d-c0c9-4a53-a8fe-af5fd0784f21.png)
+
+_Figuur 21:_ Kosten en accuraatheid bij twee Dropout-lagen van 0.2.
+
+In figuur 21 zijn de resultaten van versie twee weergegeven. Dit is duidelijk de meest milde variant van Dropout die wij hebben toegepast. Hoewel overfitting van het basismodel is tegengegaan, zijn nog duidelijk wel kenmerken van de beginsituatie te herkennen; zo is de lijn van de validatie kosten nog steeds stijgend, en bereikt de accuraatheid van de training weer de 0.9. 
+
+![image](https://user-images.githubusercontent.com/68432564/151187705-a47485d9-1e65-4550-8523-b652f372bdb8.png)
+
+_Figuur 22:_ Kosten en accuraatheid bij één Dropout-laag van 0.2.
+
+Concluderend lijkt versie 1 die de meest ingrijpende toepassing van Dropout bevat de beste aanvulling op ons basismodel. Bij deze versie wordt overfitting tegengegaan, terwijl de validatie accuraatheid precies gelijk blijft. Ten opzichte van het basismodel waar versie 2 en 3 een uitbreiding op vormen, zouden dit wel verbeteringen zijn omdat de overfitting wordt tegengegaan terwijl er maar een marginaal verlies op de validatie accuraatheid wordt geleden. Echter biedt versie 1 het beste van beide werelden: overfitting wordt tegengegaan terwijl dit niet ten koste gaat van de validatie accuraatheid. 
+
+MILESTONE 4 deel 5
+
+## Batchnormalisatie
+
+### Introductie
+Om het overfitten van het model nog verder tegen te gaan bestaat er nog een methode die hiervoor gebruikt kan worden. Deze methode werd in hoofdstuk 2 bij het basismodel benoemd en uitgelegd, namelijk batchnormalisatie. 
+Nogmaals in het kort; Bij batchnormalisatie wordt de input van de kanalen genormaliseerd door deze te centreren en te schalen aan de hand van aanleerbare parameters (gamma en beta). Batchnormalisatie kan helpen bij overfitting door het verschil in distributie van de input tussen verschillende datasets te reduceren, covariate shift genoemd. Om dezelfde distributie van data te behouden, worden de waardes van de input steeds genormaliseerd en neemt de accuratie van het model toe. Ook leert elke laag hierdoor de weights zelfstandiger aan. Naast dat batchnormalisatie helpt bij covariate shift, regulariseert het ook lichtelijk. Dit omdat door batchnormalisatie elke laag een zekere mate van ruis krijgt. Door ruis toe te voegen wordt het netwerk robuuster, minder ingesteld op de trainingsdata en simpeler, waardoor het model wellicht minder snel overfit. Het effect van overfitten tegengaan is niet een gegeven bij batchnormalisatie dus het hangt af van het huidige netwerk of het gewenste effect van minder overfitten door middel van batchnormalisatie zal worden bereikt.
+
+#### Specifieke probleem
+Het netwerk overfit nog steeds. De methode batchnormalisatie wordt toegepast om dit tegen te gaan.
+
+#### Veranderingen in het model
+In het netwerk wordt bij op kanaal batchnormalisatie toegepast. 
+
+### Data Analyse en Voorverwerking
+Er zijn geen wijzigingen aangebracht in de data die voor als eerste input gebruikt wordt. Het aanpassen van de data gebeurt tijdens het trainen van het model.
+
+### Model Pipeline en Training
+Op elk kanaal wordt de batchnormalisatie toegepast. De input van alle kanalen wordt genormaliseerd door deze te centreren en te schalen aan de hand van de aanleerbare parameters gamma en beta. Deze parameters worden geüpdate door middel van gradient descent. 
+
+### Evaluatie en Conclusies
+Een aantal verschillende hoeveelheden van batchnormalisatie zijn toegepast op het netwerk. Batchnormalisatie is toegepast op ofwel alle vier de kanalen, ofwel drie ofwel twee. Uit de resultaten is op te maken dat deze versies niet veel van elkaar verschillen. Wat duidelijk merkzaam is is dat de lijn die de validatie accuratie weergeeft nog verder lijkt te stijgen na het runnen van 20 epochs.
+
+![image](https://user-images.githubusercontent.com/68432564/151187947-6b4c24d8-9bc5-4f41-a991-2619d789aad2.png)
+
+_Figuur 23:_ Netwerk met vier batchnormalisatie lagen.
+
+![image](https://user-images.githubusercontent.com/68432564/151188088-5c33cb41-2c68-4731-a92a-f3c07964ddf2.png)
+
+_Figuur 24:_ Netwerk met drie batchnormalisatie lagen.
+
+![image](https://user-images.githubusercontent.com/68432564/151188167-72ebf271-5072-4f09-8931-0acdc33ebe5e.png)
+
+_Figuur 25:_ Netwerk met twee batchnormalisatie lagen.
+
+
+
 Bronnen:
+
 1). https://towardsdatascience.com/analyzing-different-types-of-activation-functions-in-neural-networks-which-one-to-prefer-e11649256209
 
 2). https://www.tensorflow.org/api_docs/python/tf/keras/preprocessing/image/ImageDataGenerator
