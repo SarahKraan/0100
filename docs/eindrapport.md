@@ -442,7 +442,7 @@ De verbetering van dit hoofdstuk vormt het slotstuk van de data augmentatie; wij
 
 MILESTONE 4 deel 4
 
-## Drop-out methode op verdiept netwerk
+## 12. Drop-out methode op verdiept netwerk
 
 ### Introductie
 Een welbekende methode tegen overfitting die ook al eerder in dit verslag toegepast is, is Dropout. In deze eerdere poging bleek dat het model nog niet complex genoeg was om Dropout toe te passen; in dat geval zorgde de Dropout voor het verlies van te veel essentiële informatie, waardoor de validatie accuraatheid afnam. Aangezien het huidige model wel meerdere lagen bevat, lijkt het dat Dropout nu wel tot een vermindering van overfitting kan leiden. 
@@ -493,7 +493,7 @@ Concluderend lijkt versie 1 die de meest ingrijpende toepassing van Dropout beva
 
 MILESTONE 4 deel 5
 
-## Batchnormalisatie
+## 13. Batchnormalisatie
 
 ### Introductie
 Om het overfitten van het model nog verder tegen te gaan bestaat er nog een methode die hiervoor gebruikt kan worden. Deze methode werd in hoofdstuk 2 bij het basismodel benoemd en uitgelegd, namelijk batchnormalisatie. 
