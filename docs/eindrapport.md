@@ -45,6 +45,7 @@ _Afbeelding 1:_ Een aantal afbeeldingen uit de dataset ter illustratie.
 Binnen de dataset was al onderscheid gemaakt tussen training-, test- en validatiedata; de trainingsdata bevat 47332 afbeeldingen en de test- en validatiedata allebei 1625 afbeeldingen. Deze verdeling is zo optimaal mogelijk gedaan om een zo precies mogelijke voorspelling over de vogelsoort bij een afbeelding te kunnen maken. Vanwege deze verdeling die al in de dataset aanwezig was, is het niet nodig om een eigen onderverdeling te maken. 
 
 Als eerste werd alle data ingeladen. Om RAM problemen te voorkomen zijn de formaten van de afbeeldingen verkleind naar 64 x 64 pixels. We hebben dit gedaan omdat het programma dan ongeveer drie keer zo snel werkt en dus minder snel crasht. Omdat 64 een getal is wat voortkomt uit een 2 macht kan hier makkelijk mee gerekend worden (2^6 = 64).
+![formula](https://render.githubusercontent.com/render/math?math=2^{6})
 
 Ook zijn de labels van de afbeeldingen omgezet in een matrixvorm door zogeheten ‘one-hot encoding’, waarbij een 1 wordt geplaatst bij het label van de juiste categorie vogel en bij de andere categorieën een 0. Op deze manier kan de matrix van labels vergeleken worden met de uitkomst van het model.
 
