@@ -276,7 +276,7 @@ Uit de barplots blijkt dat de trainingsdata ongebalanceerd verdeeld is;
 De vogelsoorten ‘SPOTTED CATBIRD’ (116), ‘CASSOWARY’ (119), ‘BLACK SWAN’ (119), ‘INCA TERN’ (119) en ‘BARN OWL’ (120) komen bij deze dataset het minst voor, waarbij de ‘SPOTTER CATBIRD’ het minst vaak voorkomt (116 keer). 
 De vogelsoorten ‘HOUSE FINCH’ (249), 'OVENBIRD' (233), 'D-ARNAUDS BARBET' (233), 'SWINHOES PHEASANT' (217), 'WOOD DUCK' (214) komen het meest voor, waarbij de ‘HOUSE FINCHhet meest voorkomt (249 keer). De meest voorkomende vogelsoort komt dus meer dan twee keer zo veel voor in de dataset dan de minst voorkomende vogelsoort.
 
-![image](https://user-images.githubusercontent.com/68432564/150956410-87485061-b37d-4ece-8cd1-77f8d6b9da0e.png)
+![download](https://user-images.githubusercontent.com/93516633/152125381-4161b95a-ce5d-48d8-9eb2-f4448844e48c.png)
 
 _Figuur 14:_ Overzicht van de hoeveelheid trainingsafbeeldingen per vogelsoort.
 
