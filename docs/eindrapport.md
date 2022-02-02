@@ -529,6 +529,98 @@ _Figuur 25:_ Netwerk met twee batchnormalisatie lagen.
 
 Het is dus mogelijk dat de validatie accuratie verder toeneemt wanneer er meer epochs worden gerund waardoor het netwerk langer kan worden getraind. Het uiteindelijke model dat wordt gekozen om te finaliseren is het netwerk waarbij op drie kanalen batchnormalisatie is toegepast. Hiervoor is gekozen omdat bij dit netwerk het meest duidelijk te zien is dat de validatie accuratie nog verder zou kunnen stijgen. Dit netwerk zal in het volgende hoofdstuk voor 200 epochs worden gerund om te kijken of de validatie accuratie nog verder toeneemt.
 
+## 14. Runnen van meer epochs
+
+### Introductie
+Het voorgaande model is getest met 20 epochs. Een epoch houdt in dat de gehele dataset door het netwerk is gegaan. Uit het eerdere model lijkt het alsof de validatie accuraatheid nog toe kan nemen na de 20 uitgevoerde epochs. Er is namelijk in de grafiek een stijgende lijn te zien van de validatie accuraatheid. Hoe meer epochs je toevoegt, des te vaker de weights worden aangepast om zo de data goed te voorspellen. Meer epochs zouden zo dus kunnen leiden tot een hogere validatie accuraatheid. Wel moet er rekening worden gehouden met overfitten. Als je te veel epochs toe voegt, dan gaat de trainingsdata dus vaak door het netwerk heen, wat ertoe kan leiden dat het netwerk precies goed de trainingsdata aanleert.
+
+#### Specifieke probleem
+De validatie accuraatheid lijkt nog te stijgen na de 20e epoch, en is dus mogelijk nog niet optimaal. Om de validatie accuraatheid te verhogen, wordt het model uitgevoerd met meerdere epochs. Omdat veel epochs toe voegen ook kan zorgen voor overfitting, wordt er ook gekeken naar het optimale aantal epochs via een ‘early stopping call back’ functie.
+
+#### Veranderingen in het model
+Aan het model zelf wordt niks verandert. Er wordt nog steeds gebruik gemaakt van het voorgaande model, waarbij drie batchnormalisatie lagen werden toegevoegd. In de functie die wordt gebruikt om het model te trainen en evalueren wordt de eerste keer het aantal epochs aangepast van de standaard 20, naar nu 50 epochs. Verder wordt het model een keer gerund waarbij de functie voor het trainen en het evalueren van het model een ‘early stopping call back’ functie wordt gebruikt.
+
+### Data Analyse en Voorverwerking
+Bij deze verbeterstap is geen data analyse of voorverwerking van pas gekomen maar is de data gebruikt zoals in het voorgaande hoofdstuk (waarbij er dus gebruik is gemaakt van batchnormalisatie en data augmentation).
+
+### Model Pipeline en Training
+Om het model te trainen met 50 epochs, wordt het aantal epochs naar 50 gezet. Dit houdt dus in dat de trainingsdata 50 keer door het model heen gaan. 
+
+### Evaluatie en Conclusies
+Het netwerk is nu gerund met 50 epochs. Uit de grafiek valt af te lezen dat de validatie accuraatheid minder sterk is toegenomen dan verwacht. De validatie accuraatheid is bij het runnen van het model met 50 epochs vergeleken 20 epochs met ongeveer 2 procent gestegen, van 80% voor het netwerk met 20 epochs naar nu 82% voor het netwerk met 50 epochs. De lijn blijft dus redelijk constant na 20 epochs, waarbij er een validatie accuraatheid is van ongeveer 82%. De validatie kost is echter ook toegenomen, en uit de grafiek lijkt het alsof deze lijn blijft stijgen naarmate er meer epochs worden toegevoegd. De kost van de trainingsdata neemt echter nog wel steeds af. Zo is te zien dat meer epochs toevoegen bij ons model meer kan leiden tot overfitting. Hierdoor is besloten het model te laten blijven runnen met 20 epochs in plaats van 50 epochs.
+
+![image](https://user-images.githubusercontent.com/68432564/152116193-cd80c1b8-a325-49d9-8207-2ce6a702d6fb.png)
+
+_Figuur 26:_ Netwerk gerund met 50 epochs.
+
+## 15. Learning rate
+
+### Introductie
+Om te zorgen dat het model sneller tot een accuraat model kan komen wordt er gekeken naar de learning rate. De learning rate is de stapgrootte die gebruikt wordt bij gradient descent, om zo de kostenfunctie zo laag mogelijk te krijgen. De stappen duidelijk gemaakt in afbeelding 12, waarop te zien is dat door middel van het aanpassen van de parameters (gewichten en bias termen) het lokale optimum wordt bereikt van de kostenfunctie. De parameters worden bij elke stap die gezet wordt in de gradient descent aangepast. Hoe groter de learning rate, des te groter de stappen die worden genomen op de kostenfunctie. Doordat de stapgrootte groot is, wordt het lokale minimum sneller bereikt en werkt het netwerk dus sneller. 
+
+Echter, de parameters van het netwerk worden hierdoor ook minder vaak aangepast ten opzichte van een kleinere learning rate. Een ander nadeel van een te grote learning rate is dat het lokale minimum van de kostenfunctie gemist kan worden en dat de gradient descent divergeert. Een grote learning rate is zo dus minder nauwkeurig. Bij een kleinere learning rate worden er dus kleine stappen gezet richting het lokale minimum. Doordat er kleine stappen worden gezet, is het netwerk ook trager. De parameters worden nu dus echter wel vaker aangepast en het netwerk is nauwkeuriger. 
+
+Hoe meer het netwerk getraind wordt, des te lager de learning rate kan zijn. Aan het begin kunnen er namelijk grote stappen gezet worden richting het lokale minimum. Hoe dichter bij je het lokale minimum komt, des te kleiner dus de kosten en des te nauwkeuriger je de gewichten wil aanpassen. Het steeds kleiner maken van de learning rate wordt exponential decay genoemd.
+
+![image](https://user-images.githubusercontent.com/68432564/152116279-c1a0481f-61dd-45c2-a038-861216b009ff.png)
+
+_Afbeelding 12:_ Voorbeeld van gradient descent, waarbij de kostenfunctie wordt weergeven op de y-as en de parameters op de x en z-as (4).
+
+#### Specifieke probleem
+De validatie kosten zijn nog aanzienlijk hoger dan de trainingskosten. Verder stijgt de validatie accuraatheid niet meer na ongeveer 20 epochs. Om de validatiekosten lager te krijgen en de validatie accuraatheid hoger te krijgen worden er verschillende learning rates uitgeprobeerd om zo de gradient descent te optimaliseren.
+
+#### Veranderingen in het model
+Aan het model wordt niks aangepast. Het trainen van het model wordt wel meerdere keren aangepast. De eerste keer wordt het model getraind met een learning rate van 0.1, waarbij er verder 20 epochs worden gebruikt. De tweede keer en derde wordt er gebruik gemaakt van exponential decay, dus de learning rate wordt steeds kleiner. Hierbij wordt er verder gebruik gemaakt van 50 en 100 epochs.
+
+### Data Analyse en Voorverwerking
+Bij deze verbeterstap is geen data analyse of voorverwerking van pas gekomen maar is de data gebruikt zoals in het voorgaande hoofdstuk.
+
+### Evaluatie en Conclusies
+Uit figuur 27 blijkt dat een learning rate van 0.1 zorgt voor een hoge kosten van zowel de training als validatie data. De validatie accuraatheid en trainingsaccuraatheid zijn verder lager dan voorgaande modellen (van een validatie accuraatheid van 77% in het voorgaande netwerk is dit gedaald naar 56% voor het huidige netwerk). Een verklaring hiervoor is dat de learning rate te groot is, waardoor het model divergeert. Hieruit valt dus te concluderen dat een learning rate van 0.1 niet goed werkt voor gradient descent, en dat voor een goed model een lagere learning rate gebruikt moet worden.
+
+![image](https://user-images.githubusercontent.com/68432564/152116381-b7dfd054-325f-4502-9964-e268b1ed8bdb.png)
+
+_Figuur 27:_ Learning rate van 0.1 bij 20 epochs.
+
+Naast een learning rate van 0.1 is exponential decay voor de learning rate met een verschillend aantal epochs uitgeprobeerd. Uit figuur 28 blijkt dat bij exponential decay 20 epochs te weinig is om het netwerk zo optimaal mogelijk is te trainen. De kosten van zowel de validatie data als trainingsdata lopen namelijk sterk op. De accuraatheden nemen wel toe met het aantal epochs.
+
+![image](https://user-images.githubusercontent.com/68432564/152116437-be657254-c504-4313-8ffd-c124c0cff68a.png)
+
+_Figuur 28:_ Exponential decay bij 20 epochs.
+
+Omdat de accuraatheden toenemen met het aantal epochs is besloten om het netwerk nog een keer te trainen met een exponential decay learning rate gedurende 50 en 100 epochs. In figuur 29 en 30 is bij zowel 50 als 100 epochs is te zien dat de validatie en training accuraatheden toenemen naarmate er meer epochs worden toegevoegd (validatie accuraatheid van 69% bij 50 epochs en 77% bij 100 epochs). Echter blijft de validatie accuraatheid kleiner dan de behaalde 82% die werd verkregen bij het runnen van het netwerk in het voorgaande hoofdstuk met de standaard learning rate en een aantal epochs van 50. Ook lijkt de validatie accuraatheid na de 75 epochs niet veel verder toe te nemen. Hieruit valt te concluderen dat het voorgaande netwerk met de standaard learning rate van 0.01 beter werkte dan een van onderstaande modellen. 
+
+![image](https://user-images.githubusercontent.com/68432564/152116511-806ebd48-ee49-42b0-af44-7a813a2a37af.png)
+
+_Figuur 29:_ Exponential decay bij 50 epochs.
+
+![image](https://user-images.githubusercontent.com/68432564/152116571-8eaf1a0b-be37-43c5-b8cc-24abc96118f1.png)
+
+_Figuur 30:_ Exponential decay bij 100 epochs.
+
+In het voorgaande hoofdstuk is het netwerk met een standaard learning rate van 0.01 gerund. Wanneer dit netwerk met standaard learning rate wordt vergeleken met een netwerk met exponential decay gerund op 50 epochs, geeft het netwerk met de standaard learning rate de hoogste validatie accuraatheid (82%). 
+
+Voor het netwerk is er in het vorige hoofdstuk voor gekozen om epoch aantal van 20 aan te houden, omdat bij het runnen van meer epochs het netwerk maar heel licht toeneemt in validatie accuraatheid maar wel weer sterker overfit. Dit netwerk levert zo een validatie accuraatheid van 80% op. Dit netwerk met een standaard learning rate uit het voorgaande hoofdstuk is dan ook het uiteindelijke netwerk van het huidige project.
+
+
+## 16. Samenvatting en conclusie
+In dit project is een convolutioneel neuraal netwerk ontwikkeld wat als doel heeft verschillende vogelsoorten te classificeren. Het maatschappelijke doel van het ontwikkelen van dit model is om een bijdrage te leveren aan het verminderen van het aantal bedreigde diersoorten. Door snel en efficiënt vogels te kunnen classificeren, kan in kaart worden gebracht hoeveel vogels er in een bepaald leefgebied leven en kan hier gepast naar gehandeld worden. 
+
+Om tot het uiteindelijke model te komen dat het best voorspelt, zijn verschillende stappen ondernomen. De basisopzet was een simpel model, met twee convolutionele lagen, twee pooling lagen, een flatten laag en een dense laag. Dit model gaf een validatie accuraatheid van 24%. Na vastgesteld te hebben dat dit door de hoge mate van overfitting veroorzaakt werd, zijn er verschillende hoeveelheden drop-out lagen met verschillende waarschijnlijkheden toegevoegd aan het model. Al deze varianten leidden tot een validatie accuraatheid die een stuk lager lag, waardoor dit niet werd meegenomen in het nieuwe model. Vervolgens is het model verdiept met een extra convolutional laag van 128 nodes  en een convulational laag van 256 nodes, beide met bijbehorende MaxPooling-laag. Deze aanpassing leverde het gewenste effect op want de validatie accuraatheid nam toe en de overfitting nam af. Om verdere overfitting tegen te gaan zijn in de hidden layers de ReLu-activatiefuncties vervangen door Leaky ReLu-activatiefuncties, waarbij gebruik is gemaakt van verschillende alpha’s. Voor een alpha van 0.1 bleek de validatie accuraatheid bijna 10% toegenomen tot 61%, dus dit vormde een mooie verbetering. Daarna zijn de trainings- en validatie-afbeeldingen genormaliseerd tijdens de preprocess fase, wat ook een interessante toename van rond de 10% van de validatie accuraatheid opleverde. Omdat uit de data-analyse bleek dat sommige vogelsoorten minder voorkwamen dan andere, zijn de soorten ook nog op basis van frequentie meegewogen bij het fitten van het model. Dit leverde echter geen verbetering op, dus is niet meegenomen in het verdere model. Vervolgens is er nog meer data-augmentatie toegepast; door voor elke afbeelding random te bepalen of deze horizontaal geflipt en toegevoegd aan de data wordt, wordt de data vermeerderd. Door op elke afbeelding een klein beetje in te zoomen (zoom range 0.75-1) komt de nadruk meer op de essentiële informatie van de afbeelding te liggen. Met deze beide data-augmentaties geïmplementeerd stijgt de validatie accuraatheid naar 77%. Daarna is opnieuw de drop-out methode toegepast, waarbij bleek dat 3 drop-out lagen van 0.2 de beste aanvulling vormde; de overfitting nam af zonder dat hier trade-offs tegenover stonden. Ook bleek uit het testen van meerdere versies van batchnormalisatie dat dit het meest wenselijk functioneerde bij 2 lagen. Meer epochs runnen is ook nog getracht, maar de toename in de mate van overfitting vormde een te grote trade-off. Ten slotte is ook nog gekeken naar het aanpassen van de learning rate, maar dit leverde geen verdere verbeteringen op. Het definitieve model is in de model summary van figuur 31 weergegeven.
+
+Uiteindelijk is er met dit project een convolutioneel neuraal netwerk ontwikkeld dat een validatie accuraatheid heeft van ongeveer 80%. Dit houdt in dat van alle vogel afbeeldingen van de validatie data, het netwerk 80% van deze vogel afbeeldingen correct classificeerde als de soort waar deze vogel toe behoort. Aangezien het netwerk is getraind met 325 verschillende vogelsoorten, is het vrij complex om een afbeelding van een vogel exact als de juiste klasse te classificeren. Om die reden zijn wij tevreden met het behaalde eindresultaat. 
+
+Met nog meer aanpassingen is dit model nog weldegelijk accurater te maken. Zo bleek uit de netwerk analyse dat kleur een goede onderscheidende factor voor vogelsoorten zou kunnen zijn; namelijk, vogels met een duidelijke felle kleur werden beter voorspeld door het model. Kleur zou dan als feature aan het model toegevoegd kunnen worden. Ook zou nog op basis van de confusion matrix onderzocht kunnen worden welke vogelsoorten vaak met elkaar verward worden. Op basis van deze informatie zou nog bijvoorbeeld een andere feature dan kleur toegevoegd kunnen worden die voor een duidelijke afbakening tussen soorten zorgt. Ten slotte kan het nog nuttig blijken om andere vormen van data-augmentatie toe te passen, zoals het roteren van de afbeeldingen.
+
+![image](https://user-images.githubusercontent.com/68432564/152116658-ef3c8c79-a9d5-457f-b6a8-d3aa24f6f705.png)
+
+_Figuur 31:_ Model summary van definitieve model.
+
+
+
+
+
+
 Bronnen:
 
 1). https://towardsdatascience.com/analyzing-different-types-of-activation-functions-in-neural-networks-which-one-to-prefer-e11649256209
