@@ -11,6 +11,12 @@
 [9: Netwerk analyse](#9-netwerk-analyse)\
 [10: Data augmentatie (horizontale flip)](#10-data-augmentatie-horizontale-flip)\
 [11: Data augmentatie (croppen)](#11-data-augmentatie-croppen)\
+[12: Drop-out methode op verdiept netwerk](#12-drop---out-methode-op-verdiept-netwerk)\
+[13: Batchnormalisatie](#13-batchnormalisatie)\
+[14. Runnen van meer epochs(#14-runnen-van-meer-epochs)\
+[15: Learning rate](#15-learning-rate)\
+[16: Samenvatting en conclusie](#16-samenvatting-en-conclusie)\
+[17: Bronnen](#17-bronnen)
 
 ## 1. Inleiding
 Het aantal bedreigde diersoorten neemt elk jaar toe. Dit is te wijten aan onder andere de afnemende grootte van leefruimte voor dieren, het wegvallen van primaire of non-primaire voedselbronnen, een toenemend aantal stroperijen en klimaatveranderingen. Het is cruciaal om kennis te hebben van de diersoorten die in de nabije toekomst een groot risico lopen om een bedreigde diersoort te worden. Een hulpmiddel dat voor dit doeleinde kan worden gebruikt is het tellen van het aantal dieren dat van een bepaalde soort bestaat. Hierdoor kan in kaart worden gebracht of het aantal levende dieren van een bepaalde soort wellicht te laag is en er dus om actie wordt gevraagd om dit aantal omhoog te brengen door middel van bijvoorbeeld extra bescherming en het stimuleren van voortplanting. Echter, het proces van tellen is een enorm langdradig en routineus proces dat zich perfect zou lenen voor een meer geautomatiseerde vervanging in de vorm van een systeem dat gebruikt maakt van kunstmatige intelligentie (KI). Dit geautomatiseerde proces zou tot minder nodige mankracht én minder fouten kunnen leiden, waardoor er meer tijd en energie overblijft voor andere nuttige werkzaamheden.
