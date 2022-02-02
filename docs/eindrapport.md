@@ -627,10 +627,14 @@ _Figuur 31:_ Model summary van definitieve model.
 
 
 
-Bronnen:
+## 17. Bronnen
 
 1). https://towardsdatascience.com/analyzing-different-types-of-activation-functions-in-neural-networks-which-one-to-prefer-e11649256209
 
 2). https://www.tensorflow.org/api_docs/python/tf/keras/preprocessing/image/ImageDataGenerator
 
 3). https://www.kaggle.com/gpiosenka/100-bird-species
+
+4). 
+https://medium.com/@dhartidhami/machine-learning-basics-model-cost-function-and-gradient-descent-79b69ff28091
+
