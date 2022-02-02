@@ -28,10 +28,13 @@ pip install -r requirements.txt
 
 
 ## Gebruiksaanwijzing
+UPDATE: De data die is gebruikt voor het huidige project wordt meerdere malen geupdate op Kaggle. Hierbij worden extra afbeeldingen van extra vogelsoorten toegevoegd. De methode die hieronder volgt is alleen te gebruiken wanneer in de code van het netwerk het aantal nodes in het laatste kanaal wordt gewijzigd van 325 naar het aantal vogelsoorten waar de data op dat moment uit bestaat. 
+
+https://drive.google.com/drive/folders/1-5F53jzy4oM3Tjkr2zPGZ3RqNWBQP5Q8?usp=sharing
+
 Om het model uit te voeren, moet de data van de afbeeldingen van de vogels beschikbaar worden gemaakt. Dit kan op 2 manieren:
 1. Door middel van de data te downloaden en toe te voegen aan uw Google Drive. Hiervoor moet de data gedownload worden van de '325 Bird Species - Classification' dataset op uw computer via de link: https://www.kaggle.com/gpiosenka/100-bird-species. Vervolgens voegt u de gedownloade data toe aan uw Google Drive onder een map genaamd: 'AIproject'. In de map 'AIproject' upload u de '325 Bird Species - Classification' dataset.
-2.  UPDATE: De data die is gebruikt voor het huidige project wordt meerdere malen geupdate op Kaggle. Hierbij worden extra afbeeldingen van extra vogelsoorten toegevoegd. De methode die hieronder volgt is alleen te gebruiken wanneer in de code van het netwerk het aantal nodes in het laatste kanaal wordt gewijzigd van 325 naar het aantal vogelsoorten waar de data op dat moment uit bestaat.\
-Methode: Door middel van het gebruik te maken van uw API token. Hiervoor gaat u naar de website www.kaggle.com en vervolgens naar uw account. Hier klikt u op 'Create New API token'. Er wordt een kaggle.json bestand gedownload op uw computer. Dit json bestand kunt u vervolgens uploaden wanneer u de code van het model runt.
+2.  Door middel van het gebruik te maken van uw API token. Hiervoor gaat u naar de website www.kaggle.com en vervolgens naar uw account. Hier klikt u op 'Create New API token'. Er wordt een kaggle.json bestand gedownload op uw computer. Dit json bestand kunt u vervolgens uploaden wanneer u de code van het model runt.
 
 Nadat u de data hebt ingeladen, opent u het model via de map '/code/basismodel' in de repository, en voert u het programma uit.
 
