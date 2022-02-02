@@ -13,7 +13,7 @@
 [11: Data augmentatie (croppen)](#11-data-augmentatie-croppen)\
 [12: Drop-out methode op verdiept netwerk](#12-drop---out-methode-op-verdiept-netwerk)\
 [13: Batchnormalisatie](#13-batchnormalisatie)\
-[14. Runnen van meer epochs(#14-runnen-van-meer-epochs)\
+[14. Runnen van meer epochs](#14-runnen-van-meer-epochs)\
 [15: Learning rate](#15-learning-rate)\
 [16: Samenvatting en conclusie](#16-samenvatting-en-conclusie)\
 [17: Bronnen](#17-bronnen)
