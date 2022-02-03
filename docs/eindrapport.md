@@ -37,7 +37,7 @@ Het specifieke probleem dat in dit gedeelte van het eindrapport wordt behandeld 
 #### Overzicht model
 Voor de opbouw van het basismodel is gebruik gemaakt van de TensorFlow bibliotheek. Om te beginnen zijn een aantal basislagen aan het model toegevoegd. Hierbij zijn om en om twee Conv2D lagen en MaxPooling lagen gebruikt voor de ‘feature extraction’ fase, gevolgd door een Flatten en Dense laag voor de classificatie fase. Er is gekozen om te beginnen met twee Conv2D en Maxpooling lagen in de ‘feature extraction’ fase, om zo het model de features te leren van de verschillende vogelsoorten. Omdat dit nog het basismodel is, hebben we besloten het model simpel te houden, en dus nog niet al te veel lagen toe te voegen. Zo kan namelijk gecheckt worden hoe opvallend de features van de verschillende vogelsoorten zijn, en hoe goed ze dus op een basisniveau al te onderscheiden zijn van elkaar. Verder hebben we in de classificatie fase één flatten laag, omdat de verschillende feature maps maar een keer tot een vector genomen hoeven te worden. Het toevoegen van slechts een dense layer is weer om het model zo simpel mogelijk te houden, en te kijken hoe goed het model al voorspelt als het nog niet al te complex is gemaakt.
 
-![image](https://user-images.githubusercontent.com/68432564/150953829-d48db968-be4f-4bde-87c1-4b0fba2d10be.png)
+![image](https://user-images.githubusercontent.com/68432564/152384031-0142ea4a-64e4-4a93-b395-d843d79b8311.png)
 
 _Figuur 1:_ Model opbouw 
 
@@ -107,9 +107,9 @@ In een tweede versie is de kans van deze dropout-lagen gehalveerd, om zo het eff
 
 Ten slotte is in een derde versie aan het basismodel slechts de eerste dropout-laag (tussen de twee Conv2D-lagen) met de gehalveerde kans toegevoegd. 
 
-![image](https://user-images.githubusercontent.com/68432564/150954711-0938a785-cb09-44c5-9175-e7388b451a8d.png)
+![image](https://user-images.githubusercontent.com/68432564/152384234-34b8f04a-dc8d-4aa7-b481-9cdb18f58143.png)
 
-_Figuur 3:_ Model opbouw 
+_Figuur 3:_ Model opbouw van versies 1 & 2. Voor versie 3 is de tweede drop-out laag verwijderd.
 
 ### Data Analyse en Voorverwerking
 In het geval van de verbetering in dit hoofdstuk is slechts het toevoegen van hidden layers vereist, en dus geen voorverwerking van data.
@@ -157,7 +157,7 @@ Het probleem van het beginmodel is dat dit nog niet complex genoeg is. De oploss
 #### Veranderingen in het model
 Het huidige model neemt het basismodel uit hoofdstuk 2 opnieuw als basis. Aan dit model zijn twee extra Conv2D lagen toegevoegd inclusief MaxPooling lagen; een Conv2Dlaag met 128 nodes (en bijbehorende MaxPooling laag) en een Conv2D laag met 256 nodes (ook met bijbehorende MaxPooling laag).
 
-![image](https://user-images.githubusercontent.com/68432564/150955332-0cb7b2fc-d119-4102-bab7-287e5f6edea2.png)
+![image](https://user-images.githubusercontent.com/68432564/152385028-19a4e1dc-5408-4d98-a140-17a6b12659c3.png)
 
 _Figuur 7:_ Model opbouw
 
@@ -471,7 +471,7 @@ Bij deze verbeterstap is geen data analyse of voorverwerking van pas gekomen maa
 ### Model Pipeline en Training
 Het voorgaande model is aangevuld met drie Dropout-lagen, die telkens na de MaxPooling-lagen geplaatst zijn. De waarschijnlijkheid in deze lagen is gesteld op 0.2, een redelijk lage waarde die niet tot al te extreme Dropout zal leiden. In figuur 19 is te zien hoe dit voor versie 1 eruit komt te zien. In de latere versies zijn slechts Dropout-lagen hieruit verwijderd, dus dit geeft een goede impressie.
 
-![image](https://user-images.githubusercontent.com/68432564/151187282-1caff67c-7959-4f51-940a-46d16f775647.png)
+![image](https://user-images.githubusercontent.com/68432564/152384920-e39746fe-f307-427e-a3cc-97e1339f643b.png)
 
 _Figuur 19:_ Model-summary bij toevoeging van de drie Dropout-lagen (versie 1)
 
@@ -616,11 +616,15 @@ Om tot het uiteindelijke model te komen dat het best voorspelt, zijn verschillen
 
 Uiteindelijk is er met dit project een convolutioneel neuraal netwerk ontwikkeld dat een validatie accuraatheid heeft van ongeveer 80%. Dit houdt in dat van alle vogel afbeeldingen van de validatie data, het netwerk 80% van deze vogel afbeeldingen correct classificeerde als de soort waar deze vogel toe behoort. Aangezien het netwerk is getraind met 325 verschillende vogelsoorten, is het vrij complex om een afbeelding van een vogel exact als de juiste klasse te classificeren. Om die reden zijn wij tevreden met het behaalde eindresultaat. 
 
+![image](https://user-images.githubusercontent.com/68432564/152384725-278d06da-4f77-49c4-82b2-75389b6c4754.png)
+
+_Figuur 31:_ De resultaten van het uiteindelijke model gerund met de testdata.
+
 Met nog meer aanpassingen is dit model nog weldegelijk accurater te maken. Zo bleek uit de netwerk analyse dat kleur een goede onderscheidende factor voor vogelsoorten zou kunnen zijn; namelijk, vogels met een duidelijke felle kleur werden beter voorspeld door het model. Kleur zou dan als feature aan het model toegevoegd kunnen worden. Ook zou nog op basis van de confusion matrix onderzocht kunnen worden welke vogelsoorten vaak met elkaar verward worden. Op basis van deze informatie zou nog bijvoorbeeld een andere feature dan kleur toegevoegd kunnen worden die voor een duidelijke afbakening tussen soorten zorgt. Ten slotte kan het nog nuttig blijken om andere vormen van data-augmentatie toe te passen, zoals het roteren van de afbeeldingen.
 
-![image](https://user-images.githubusercontent.com/68432564/152116658-ef3c8c79-a9d5-457f-b6a8-d3aa24f6f705.png)
+![image](https://user-images.githubusercontent.com/68432564/152384532-2aa8f032-7304-4f3f-ae31-614db1b46a54.png)
 
-_Figuur 31:_ Model summary van definitieve model.
+_Figuur 32:_ Model overzicht van definitieve model.
 
 
 
