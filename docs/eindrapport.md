@@ -48,7 +48,7 @@ De dataset 325 Birds Species te vinden op [kaggle](https://www.kaggle.com/gpiose
 
 _Afbeelding 1:_ Een aantal afbeeldingen uit de dataset ter illustratie.
 
-Binnen de dataset was al onderscheid gemaakt tussen training-, test- en validatiedata; de trainingsdata bevat 47332 afbeeldingen en de test- en validatiedata allebei 1625 afbeeldingen. Deze verdeling is zo optimaal mogelijk gedaan om een zo precies mogelijke voorspelling over de vogelsoort bij een afbeelding te kunnen maken. Vanwege deze verdeling die al in de dataset aanwezig was, is het niet nodig om een eigen onderverdeling te maken. 
+Binnen de dataset was al onderscheid gemaakt tussen training-, test- en validatie data; de trainingsdata bevat 47332 afbeeldingen en de test- en validatie data allebei 1625 afbeeldingen. Deze verdeling is zo optimaal mogelijk gedaan om een zo precies mogelijke voorspelling over de vogelsoort bij een afbeelding te kunnen maken. Vanwege deze verdeling die al in de dataset aanwezig was, is het niet nodig om een eigen onderverdeling te maken. 
 
 Als eerste werd alle data ingeladen. Om RAM problemen te voorkomen zijn de formaten van de afbeeldingen verkleind naar 64 x 64 pixels. We hebben dit gedaan omdat het programma dan ongeveer drie keer zo snel werkt en dus minder snel crasht. Omdat 64 een getal is wat voortkomt uit een 2 macht kan hier makkelijk mee gerekend worden: ![formula](https://render.githubusercontent.com/render/math?math=2^{6}) = 64.
 
@@ -60,11 +60,11 @@ Het basismodel neemt als input de trainingsdata die bestaat uit 47332 afbeelding
 
 Ten slotte worden van de pixels door middel van Flatten een vector gemaakt, en kan de foto geclassificeerd worden onder een van de klassen door middel van een Dense layer met een softmax activatiefunctie. Een softmax activatiefunctie wordt over het algemeen vaak gebruikt bij het classificeren van afbeeldingen met meerdere klassen (1). Een softmax functie berekent namelijk eerst per afbeelding voor elke klasse een getal dat aangeeft in hoeverre de afbeelding tot die bepaalde klasse behoort. Hierna worden deze waardes genormaliseerd naar waarschijnlijkheden volgens een waarschijnlijkheidsverdeling. Het aantal noden van de laatste laag is dan gelijk aan het aantal klassen vogelsoorten, 325, en per klasse is er dus een waarschijnlijkheid berekend. Het voordelige van het gebruiken van een softmax functie bij het classificeren met meerdere klassen is dat de softmax dan dus een waarde voorspelt tussen 0 en 1 voor elke klasse, waarbij de waardes bij elkaar opgeteld 1 zijn en hierdoor voor elke klasse de waarschijnlijkheid weergeeft dat een afbeelding tot deze klasse behoort. Dit zorgt voor een intuïtieve uitkomst die gemakkelijk interpreteerbaar is. 
 
-Voor het trainen van het model wordt een aantal van 20 epochs aangehouden. Dit aantal is gekozen omdat dit voldoende mogelijkheden voor het model oplevert om te trainen, zonder onnodig veel verwerkingstijd te eisen zoals bij een hoger aantal epochs het geval is. Om te kijken hoe goed het model het doet, kan worden gekeken naar de kosten die het model maakt en de accuraatheid van het model. Als we dit in 2 aparte plots zetten en de training en de validatie data tegen elkaar uitzetten kan zo een goed beeld geschetst worden van de vooruitgang. De kosten worden berekend door middel van het toepassen van de categorical crossentropy functie. Deze functie is goed voor het classificeren omdat de voorspellingen altijd tussen de 0 en 1 uit zullen komen; 0 voor zeker niet en 1 voor zeker wel. 
+Voor het trainen van het model wordt een aantal van 20 epochs aangehouden. Dit aantal is gekozen omdat dit voldoende mogelijkheden voor het model oplevert om te trainen, zonder onnodig veel verwerkingstijd te eisen zoals bij een hoger aantal epochs het geval is. Om te kijken hoe goed het model het doet kan worden gekeken naar de kosten die het model maakt en de accuraatheid van het model. Als we dit in 2 aparte plots zetten en de training en de validatie data tegen elkaar uitzetten kan zo een goed beeld geschetst worden van de vooruitgang. De kosten worden berekend d.m.v. het toepassen van de categorical crossentropy functie. De categorical crossentropy functie is een functie die wordt gebruikt in multi-klassen classificatie taken. Dit zijn taken waarbij een voorspelling maar tot 1 klasse kan behoren, het model beslist welke klassen dit wordt. Als een model een plaatje van een kat moet classificeren en uit de klassen ‘kat’, ‘hond’ en ‘vogel’ dan voorspelt de functie een waarde die zegt hoe zeker het model is dat het plaatje tot een klassen behoort. Het plaatje van een kat zal een lage score krijgen voor de klasse ‘vogel’ omdat de kat geen vogel is. De voorspelling ‘kat’ zal verder erg hoog zijn omdat het model de kat zou herkennen. 
 
 ### Evaluatie en Conclusies
 Evaluatie door analyseren van de training en validatie resultaten:
-Na een aantal keer het model gerund te hebben is te zien dat het model overfit (zoals te zien is in de afbeelding hieronder). Dit is makkelijk te herkennen aan de trainingskosten die vrijwel op 0 zitten na de 20 epochs terwijl de validatiekosten omhoog blijven gaan. Ook is te zien dat de accuraatheid van de validatiedata blijft steken op 24%, terwijl de trainingsdata een accuraatheid heeft van 95%. 
+Na een aantal keer het model gerund te hebben is te zien dat het model overfit (zoals te zien is in de afbeelding hieronder). Dit is makkelijk te herkennen aan de trainingskosten die vrijwel op 0 zitten na de 20 epochs terwijl de validatiekosten omhoog blijven gaan. Ook is te zien dat de accuraatheid van de validatie data blijft steken op 24%, terwijl de trainingsdata een accuraatheid heeft van 95%. 
 
 ![image](https://user-images.githubusercontent.com/68432564/150954540-90615182-1eb1-4137-a656-4e3a4829d797.png)
 
@@ -95,7 +95,7 @@ Als eerste zal worden geprobeerd het overfitten van het basismodel tegen te gaan
 ### Introductie
 Uit de resultaten van het basismodel in het vorige hoofdstuk blijkt dat het model nog erg de neiging heeft tot overfitting. Al bij de eerste epochs wordt duidelijk dat de validatiekosten enorm stijgen en de trainingskosten heel laag worden, waaruit blijkt dat het model zeer nauwkeurig is afgestemd op de trainingsdata en niet goed bestand is tegen nieuwe datasets. De kern voor de aanpak van deze onnauwkeurigheid ligt in het selecteren van de data die het model gebruikt. 
 
-Een methode om dit te verhelpen is de zogeheten dropout-methode. Bij de dropout-methode wordt een hidden layer toegevoegd aan het model, die ervoor zorgt dat met een bepaalde kans delen van de input van de laag naar een waarde van 0 worden gezet. Hierdoor worden zo dus bepaalde nodes in deze laag genegeerd tijdens het trainen van het model. Tijdens elke epoch wordt in deze laag deze kans voor elk input toegepast, wat kan leiden tot het gebruiken van verschillende sets van nodes bij het trainen van het model. De kracht van deze methode ligt in het feit dat bepaalde punten die vanwege grote uitschieters ervoor zorgen dat het model de trainingsdata erg specifiek nabootst, kunnen wegvallen en zo minder invloed hebben. Zo wordt het model robuuster voor invoer van nieuwe datasets, zoals de validatiedata.
+Een methode om dit te verhelpen is de zogeheten dropout-methode. Bij de dropout-methode wordt een hidden layer toegevoegd aan het model, die ervoor zorgt dat met een bepaalde kans delen van de input van de laag naar een waarde van 0 worden gezet. Hierdoor worden zo dus bepaalde nodes in deze laag genegeerd tijdens het trainen van het model. Tijdens elke epoch wordt in deze laag deze kans voor elk input toegepast, wat kan leiden tot het gebruiken van verschillende sets van nodes bij het trainen van het model. De kracht van deze methode ligt in het feit dat bepaalde punten die vanwege grote uitschieters ervoor zorgen dat het model de trainingsdata erg specifiek nabootst, kunnen wegvallen en zo minder invloed hebben. Zo wordt het model robuuster voor invoer van nieuwe datasets, zoals de validatie data.
 
 #### Specifieke probleem
 Het probleem dat getackeld dient te worden met deze ingreep is het overfitten van de trainingsdata door het model. Door op basis van kans delen van de input in bepaalde epochs niet mee te nemen, wordt de invloed van input die veel ruis veroorzaakt verkleind.
@@ -124,13 +124,13 @@ De tweede versie is qua volgorde van het model volledig gelijk, alleen zijn de k
 Ten slotte is in de derde versie slechts gebruik gemaakt van één dropout-laag. Deze is geplaatst tussen de twee Conv2D lagen in.
 
 ### Evaluatie en Conclusies
-De resultaten van de eerste versie die dropout-lagen bevat zijn terug te vinden in figuur 2 en bevatten twee grafieken van kosten en accuraatheid. Opmerkelijk is dat het overfitten van het basismodel tegengegaan lijkt te zijn, aangezien de trainingskosten en validatiekosten dichter bij elkaar liggen. Echter valt ook op dat de accuraatheid van de validatiedata omlaag is gegaan ten opzichte van het basismodel. Dat terwijl het tegengaan van overfitting bedoeld is om het model beter werkend te maken op validatiedata zodat deze preciezer voorspeld kan worden. Met deze lagere accuraatheid voor de validatiedata vormt deze eerste versie van dropout-layers geen waardevolle aanvulling op het basismodel. Dit kan eraan liggen dat de dropout een te grote invloed had op het model, en dat met het naar 0 zetten van deze nodes te veel informatie van het model verloren is gegaan. Het model underfit dan, wat ook blijkt uit dat de kosten voor de trainingsdata in dit model een stuk hoger zijn en dat de accuraatheid van voorspelling nooit de 1 benaderd. Het is daarom verstandig om in versie 2 een dropout toe te passen met lagere kansen.
+De resultaten van de eerste versie die dropout-lagen bevat zijn terug te vinden in figuur 2 en bevatten twee grafieken van kosten en accuraatheid. Opmerkelijk is dat het overfitten van het basismodel tegengegaan lijkt te zijn, aangezien de trainingskosten en validatiekosten dichter bij elkaar liggen. Echter valt ook op dat de accuraatheid van de validatie data omlaag is gegaan ten opzichte van het basismodel. Dat terwijl het tegengaan van overfitting bedoeld is om het model beter werkend te maken op validatie data zodat deze preciezer voorspeld kan worden. Met deze lagere accuraatheid voor de validatie data vormt deze eerste versie van dropout-layers geen waardevolle aanvulling op het basismodel. Dit kan eraan liggen dat de dropout een te grote invloed had op het model, en dat met het naar 0 zetten van deze nodes te veel informatie van het model verloren is gegaan. Het model underfit dan, wat ook blijkt uit dat de kosten voor de trainingsdata in dit model een stuk hoger zijn en dat de accuraatheid van voorspelling nooit de 1 benaderd. Het is daarom verstandig om in versie 2 een dropout toe te passen met lagere kansen.
 
 ![image](https://user-images.githubusercontent.com/68432564/150955062-2a39cdd8-9fbd-4876-b5cd-a5d066f76a3f.png)
 
 _Figuur 4:_ Dropout 1: 0.4, dropout 2: 0.2
 
-In figuur 5 is te zien dat deze mildere dropout inderdaad tot betere resultaten leidt; de accuraatheid van zowel de trainingsdata als de validatiedata is gestegen, en de kosten zijn gedaald. Echter zijn deze waarden nog altijd minder wenselijk dan het basismodel, waardoor deze versie van dropout ook geen waardevolle aanvulling is op het basismodel. 
+In figuur 5 is te zien dat deze mildere dropout inderdaad tot betere resultaten leidt; de accuraatheid van zowel de trainingsdata als de validatie data is gestegen, en de kosten zijn gedaald. Echter zijn deze waarden nog altijd minder wenselijk dan het basismodel, waardoor deze versie van dropout ook geen waardevolle aanvulling is op het basismodel. 
 
 ![image](https://user-images.githubusercontent.com/68432564/150955122-aaec9143-1f67-4361-aaa5-c810ae47aefd.png)
 
@@ -147,7 +147,7 @@ Ondanks dat dropout in dit hoofdstuk op meerdere manieren is geprobeerd, is er g
 ## 4. Verdiepen van het netwerk
 
 ### Introductie
-Een mogelijke reden voor het niet werken van de dropout-methode kan zijn dat het netwerk nog niet complex genoeg is. Wanneer het netwerk niet complex genoeg is kan de dropout-methode de accuraatheid van het model verlagen, zoals in het model in het voorgaande hoofdstuk het geval was. Doordat bepaalde input wordt weggenomen, worden de nodes aan de hand van minder datapunten getraind en eindigen de weights op waardes die minder optimaal zijn. Hoewel het doel van drop-out is dat deze weights inderdaad veranderen doordat er minder input mee wordt genomen en zo minder overfitten, blijft wel het doel dat de accuraatheid van het gehele model, en dus juist de accuraatheid op de validatiedata, hierdoor toeneemt. 
+Een mogelijke reden voor het niet werken van de dropout-methode kan zijn dat het netwerk nog niet complex genoeg is. Wanneer het netwerk niet complex genoeg is kan de dropout-methode de accuraatheid van het model verlagen, zoals in het model in het voorgaande hoofdstuk het geval was. Doordat bepaalde input wordt weggenomen, worden de nodes aan de hand van minder datapunten getraind en eindigen de weights op waardes die minder optimaal zijn. Hoewel het doel van drop-out is dat deze weights inderdaad veranderen doordat er minder input mee wordt genomen en zo minder overfitten, blijft wel het doel dat de accuraatheid van het gehele model, en dus juist de accuraatheid op de validatie data, hierdoor toeneemt. 
 
 Omdat dit doel niet werd bereikt is voor het huidige hoofdstuk besloten het netwerk te verdiepen om zo de accuraatheid van het model hopelijk te verhogen. Wanneer het model dan nog steeds overfit, kan er een nieuwe poging worden gedaan om het overfitten tegen te gaan. Dit zal dan in een nieuw hoofdstuk worden besproken.
 
@@ -320,7 +320,6 @@ _Figuur 15:_ Kosten en accuraatheid van het model waarbij ondervertegenwoordigde
 
 Omdat het verschillend mee laten wegen van de trainingsdata in de kostenfunctie geen effect oplevert, lijkt het ons verstandig om in de volgende vervolgstap te onderzoeken bij welke data het netwerk het meest de fout in gaat. De voorspelling die volgt uit het huidige hoofdstuk is dan dat de vogelsoorten die uit minder trainingsafbeeldingen bestaan het lastigst te classificeren zijn. Om deze hypothese te testen is een goede vervolgstap om te analyseren bij welke vogelsoorten de classificatie niet correct verloopt. De bevindingen die hieruit worden opgedaan kunnen verder worden verwerkt en geprobeerd tegen te gaan door passende data augmentatie toe te passen. 
 
-MILESTONE 4 deel 1
 ## 9. Netwerk analyse
 ### Introductie
 Om het overfitten van het netwerk verder tegen te gaan en de validatie accuratie van het model te verhogen, kan analyseren van hoe het netwerk tot nu toe presteert per vogelsoort relevante informatie opleveren. Door te kijken naar de validatie accuraatheid per vogelsoort, kan in kaart worden gebracht welke vogelsoorten het netwerk voornamelijk correct weet te voorspellen en welke niet. Aan de hand van deze resultaten kunnen wellicht overeenkomsten gevonden worden tussen vogelsoorten die wel goed voorspeld worden door het netwerk en vogelsoorten die niet goed worden voorspeld door het netwerk. Door te weten welke aspecten ervoor zorgen dat het netwerk een vogelsoort wel of juist niet correct voorspelt, kan er worden geprobeerd dit aspect meer naar voren te laten komen of om hier juist voor te corrigeren. 
@@ -388,7 +387,6 @@ _Afbeelding 11:_ Drie afbeeldingen van de Red Naped Trogon.
 
 Op te maken uit de afbeeldingen van de slechtst herkenbare en best herkenbare vogelsoorten is voornamelijk het verschil in kleur. De vogels die het vaakst correct worden geclassificeerd zijn vogels met opvallende kleuren. De vogels die het minst vaak correct worden geclassificeerd daarentegen zijn vogels met onopvallende kleuren. Daarnaast lijken deze onopvallende kleuren meer op de achtergronden waarop de vogels afgebeeld zijn. De vogels die het slechts worden geclassificeerd lijken hierdoor meer weg te vallen. Om het netwerk beter te trainen zijn twee opties mogelijk; ofwel het vermeerderen van de trainingsdata ofwel de beschikbare trainingsdata zo bewerken dat het netwerk meer van de data leert. Het vermeerderen van de data door middel van data augmentatie en het verwerken van de bevindingen van dit hoofdstuk door de bestaande trainingsafbeeldingen te bewerken zal in de komende twee hoofdstukken één voor één behandeld worden.
 
-MILESTONE 4 deel 2
 ## 10. Data augmentatie (horizontale flip)
 
 ### Introductie
@@ -414,7 +412,6 @@ Bestudering van de resultaten van dit hoofdstuk in figuur 16 leidt tot de conclu
 
 _Figuur 16:_ Kosten en accuraatheid bij horizontaal gespiegelde afbeeldingen in trainingsdata.
 
-MILESTONE 4 deel 3
 ## 11. Data augmentatie (croppen)
 ### Introductie
 Uit de netwerk analyse is gebleken dat voor een aantal klassen de vogelsoorten niet goed herkend kunnen worden. Dit kan komen doordat bijvoorbeeld de kleuren van de vogels te veel overeenkomen met de kleuren in de achtergrond. Voor slechts een paar afbeeldingen hoeft dit geen probleem te zijn, maar als er bijvoorbeeld in de dataset veel afbeeldingen voorkomen van bruine vogels in hun bruine natuurlijke leefomgeving kan het model hier snel moeite mee krijgen. Om dit te voorkomen kan worden gekeken of het inzoomen op de foto’s tot een verbetering leidt. Zo wordt de focus voor het model meer gelegd op de essentiële onderscheidende informatie van de vogel die zich meer in het centrum van de afbeelding bevindt.
@@ -445,8 +442,6 @@ Naast het kijken naar een zoom range van [0.75, 1] willen we ook zien of er meer
 _Figuur 18:_ Kosten en accuraatheid bij een zoom range van [0.5, 0.75]
 
 De verbetering van dit hoofdstuk vormt het slotstuk van de data augmentatie; wij hebben nu enkele methoden uitgeprobeerd en zijn tevreden met de geboekte resultaten. Echter is er nog voldoende progressie te boeken, en vindt er ook zeker nog overfitting plaats. Daarom gaan wij in het volgende hoofdstuk weer verder met nieuwe methodes om overfitting tegen te gaan.
-
-MILESTONE 4 deel 4
 
 ## 12. Drop-out methode op verdiept netwerk
 
@@ -496,8 +491,6 @@ In figuur 21 zijn de resultaten van versie twee weergegeven. Dit is duidelijk de
 _Figuur 22:_ Kosten en accuraatheid bij één Dropout-laag van 0.2.
 
 Concluderend lijkt versie 1 die de meest ingrijpende toepassing van Dropout bevat de beste aanvulling op ons basismodel. Bij deze versie wordt overfitting tegengegaan, terwijl de validatie accuraatheid precies gelijk blijft. Ten opzichte van het basismodel waar versie 2 en 3 een uitbreiding op vormen, zouden dit wel verbeteringen zijn omdat de overfitting wordt tegengegaan terwijl er maar een marginaal verlies op de validatie accuraatheid wordt geleden. Echter biedt versie 1 het beste van beide werelden: overfitting wordt tegengegaan terwijl dit niet ten koste gaat van de validatie accuraatheid. 
-
-MILESTONE 4 deel 5
 
 ## 13. Batchnormalisatie
 
